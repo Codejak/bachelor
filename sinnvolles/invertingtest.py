@@ -1,6 +1,7 @@
 
 
 from vtk import *
+fina_shape = open("final_shape","r")
 
 readera = vtk.vtkSTLReader()
 readera.SetFileName(final_shape)
