@@ -1,7 +1,7 @@
 
 
 from vtk import *
-fina_shape = open("final_shape","r")
+final_shape = "final_shape.stl"
 
 readera = vtk.vtkSTLReader()
 readera.SetFileName(final_shape)
@@ -20,4 +20,5 @@ interactora.SetRenderWindow(windowa)
 interactora.Initialize()
 windowa.Render()
 interactora.Start()
+print "lol"
 
