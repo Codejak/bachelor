@@ -32,16 +32,16 @@ smooth2.Update()
 #clean the shit
 clean1 = vtk.vtkCleanPolyData()
 clean1.SetInputConnection(smooth1.GetOutputPort())
-clean1.ConvertStripsToPolysOn()
-clean1.ConvertPolysToLinesOn()
-clean1.ConvertLinesToPointsOn()
+#clean1.ConvertStripsToPolysOn()
+#clean1.ConvertPolysToLinesOn()
+#clean1.ConvertLinesToPointsOn()
 clean1.Update()
 
 clean2 = vtk.vtkCleanPolyData()
 clean2.SetInputConnection(smooth2.GetOutputPort())
-clean2.ConvertStripsToPolysOn()
-clean2.ConvertPolysToLinesOn()
-clean2.ConvertLinesToPointsOn()
+#clean2.ConvertStripsToPolysOn()
+#clean2.ConvertPolysToLinesOn()
+#clean2.ConvertLinesToPointsOn()
 clean2.Update()
 
 
@@ -49,14 +49,14 @@ clean2.Update()
 #triangle that shit
 triangle1 = vtk.vtkTriangleFilter()
 triangle1.SetInputConnection(clean1.GetOutputPort())
-triangle1.PassVertsOff()
-triangle1.PassLinesOff()
+#triangle1.PassVertsOff()
+#triangle1.PassLinesOff()
 triangle1.Update()
 
 triangle2 = vtk.vtkTriangleFilter()
 triangle2.SetInputConnection(clean2.GetOutputPort())
-triangle2.PassVertsOff()
-triangle2.PassLinesOff()
+#triangle2.PassVertsOff()
+#triangle2.PassLinesOff()
 triangle2.Update()
 
 
@@ -65,29 +65,29 @@ triangle2.Update()
 #normal that shit
 normal1 = vtk.vtkPolyDataNormals()
 normal1.SetInputConnection(triangle1.GetOutputPort())
-normal1.ComputePointNormalsOn()
-normal1.ComputeCellNormalsOff()
-normal1.SplittingOff()
-normal1.ConsistencyOn()
-normal1.AutoOrientNormalsOff()
+#normal1.ComputePointNormalsOn()
+#normal1.ComputeCellNormalsOff()
+#normal1.SplittingOff()
+#normal1.ConsistencyOn()
+#normal1.AutoOrientNormalsOff()
 normal1.Update()
 
 normal2 = vtk.vtkPolyDataNormals()
 normal2.SetInputConnection(triangle2.GetOutputPort())
-normal2.ComputePointNormalsOn()
-normal2.ComputeCellNormalsOff()
-normal2.SplittingOff()
-normal2.ConsistencyOn()
-normal2.AutoOrientNormalsOff()
+#normal2.ComputePointNormalsOn()
+#normal2.ComputeCellNormalsOff()
+#normal2.SplittingOff()
+#normal2.ConsistencyOn()
+#normal2.AutoOrientNormalsOff()
 normal2.Update()
 
 
 
 #boolean Operation
 booleanfilter = vtk.vtkBooleanOperationPolyDataFilter()
-booleanfilter.SetOperationToUnion()
-booleanfilter.SetInputConnection(0, normal1.GetOutputPort())
-booleanfilter.SetInputConnection(1, normal2.GetOutputPort())
+booleanfilter.SetOperationToDifference()
+booleanfilter.SetInputConnection(0, reader1.GetOutputPort())
+booleanfilter.SetInputConnection(1, reader2.GetOutputPort())
 
 """
 boolean = vtk.vtkImplicitBoolean()
@@ -120,16 +120,15 @@ actora.GetProperty().SetEdgeColor(0.1,0.1,0.1)
 
 rendera = vtk.vtkRenderer()
 rendera.AddActor(actora)
-rendera.SetBackground(1,1,1)
+#rendera.SetBackground(1,1,1)
 
 
 windowa = vtk.vtkRenderWindow()
 windowa.AddRenderer(rendera)
-windowa.SetSize(200,200)
+#windowa.SetSize(200,200)
 
 
 interactora = vtk.vtkRenderWindowInteractor()
 interactora.SetRenderWindow(windowa)
 interactora.Initialize()
 interactora.Start() 
-print "lol"
