@@ -14,6 +14,38 @@ reader2 = vtk.vtkSTLReader()
 reader2.SetFileName(initial_shape)
 reader2.Update()
 
+polydata1 = vtk.vtkPolyData()
+polydata1 = reader1.GetOutput()
+PointNumber = polydata1.GetNumberOfPoints()
+print PointNumber
+
+for x in range(PointNumber - 1):
+  p = []
+  polydata1.GetPoints().GetPoint(x,p)
+  print p[0]
+  print p[1]
+  print p[2]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """
 #smooth the shit
 smooth1 = vtk.vtkSmoothPolyDataFilter()
@@ -74,8 +106,6 @@ normal2.ConsistencyOn()
 normal2.AutoOrientNormalsOff()
 normal2.Update()
 
-
-
 booleanfilter = vtk.vtkBooleanOperationPolyDataFilter()
 booleanfilter.SetOperationToDifference()
 booleanfilter.SetInputConnection(0, normal1.GetOutputPort())
@@ -95,7 +125,6 @@ mass2.SetInputConnection(reader2.GetOutputPort())
 mass2.Update()
 volume2 = mass2.GetVolume()
 
-print (volume1 , volume2)
 
 
 
@@ -109,13 +138,11 @@ mapper1.SetInputConnection(reader1.GetOutputPort())
 mapper2 = vtk.vtkPolyDataMapper()
 mapper2.SetInputConnection(reader2.GetOutputPort())
 
-
 actor1 = vtk.vtkActor()
 actor1.SetMapper(mapper1)
 
 actor2 = vtk.vtkActor()
 actor2.SetMapper(mapper2)
-
 
 renderer = vtk.vtkRenderer()
 #renderer.AddActor(actor1)
@@ -126,5 +153,14 @@ window.AddRenderer(renderer)
 
 interactor = vtk.vtkRenderWindowInteractor()
 interactor.SetRenderWindow(window)
+
+axes = vtk.vtkAxesActor()
+widget = vtk.vtkOrientationMarkerWidget()
+widget.SetOrientationMarker(axes)
+widget.SetInteractor(interactor)
+widget.SetEnabled(1)
+widget.InteractiveOn()
+
+window.Render()
 interactor.Initialize()
 interactor.Start() 
