@@ -16,16 +16,35 @@ reader2.Update()
 
 polydata1 = vtk.vtkPolyData()
 polydata1 = reader1.GetOutput()
-PointNumber = polydata1.GetNumberOfPoints()
-print PointNumber
+polydata2 = vtk.vtkPolyData()
+polydata2 = reader2.GetOutput()
 
-for x in range(PointNumber - 1):
-  p = []
-  polydata1.GetPoints().GetPoint(x,p)
-  print p[0]
-  print p[1]
-  print p[2]
+PointNumberObject1 = polydata1.GetNumberOfPoints()
+PointNumberObject2 = polydata2.GetNumberOfPoints()
 
+print PointNumberObject1
+print PointNumberObject2
+
+PointsObject1 = []
+PointsObject2 = []
+
+def StorePoints(ObjectToBeStored):
+  if ObjectToBeStored == "polydata1":
+    for x in range(PointNumberObject1):
+      PointsObject1.append(polydata1.GetPoints().GetPoint(x))
+    print "Points of object 1 succesfully stored"
+    print len(PointsObject1)
+
+  elif ObjectToBeStored == "polydata2":
+    for x in range(PointNumberObject2):
+      PointsObject2.append(polydata2.GetPoints().GetPoint(x))
+    print "Points of object 2 succesfully stored"
+    print len(PointsObject2)
+
+  else:
+    print "Something went wrong with the point storing..."
+
+StorePoints("polydata1")
 
 
 
