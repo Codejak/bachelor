@@ -19,33 +19,53 @@ polydata1 = reader1.GetOutput()
 polydata2 = vtk.vtkPolyData()
 polydata2 = reader2.GetOutput()
 
-PointNumberObject1 = polydata1.GetNumberOfPoints()
-PointNumberObject2 = polydata2.GetNumberOfPoints()
 
-print PointNumberObject1
-print PointNumberObject2
+pointNumberObject1 = polydata1.GetNumberOfPoints()
+pointNumberObject2 = polydata2.GetNumberOfPoints()
 
-PointsObject1 = []
-PointsObject2 = []
+print pointNumberObject1
+print pointNumberObject2
 
-def StorePoints(ObjectToBeStored):
-  if ObjectToBeStored == "polydata1":
-    for x in range(PointNumberObject1):
-      PointsObject1.append(polydata1.GetPoints().GetPoint(x))
+pointsObject1 = []
+pointsObject2 = []
+
+def storePoints(objectToBeStored):
+  if objectToBeStored == "polydata1":
+    for x in range(pointNumberObject1):
+      pointsObject1.append(polydata1.GetPoints().GetPoint(x))
     print "Points of object 1 succesfully stored"
-    print len(PointsObject1)
+    print len(pointsObject1)
 
-  elif ObjectToBeStored == "polydata2":
-    for x in range(PointNumberObject2):
-      PointsObject2.append(polydata2.GetPoints().GetPoint(x))
+  elif objectToBeStored == "polydata2":
+    for x in range(pointNumberObject2):
+      pointsObject2.append(polydata2.GetPoints().GetPoint(x))
     print "Points of object 2 succesfully stored"
-    print len(PointsObject2)
+    print len(pointsObject2)
 
   else:
     print "Something went wrong with the point storing..."
 
-StorePoints("polydata1")
+storePoints("polydata1")
+"""
+def getBoundaries(objectToBeAnalyzed):
+  sameList = []
+  if objectToBeAnalyzed == "polydata1":
+    for x in pointsObject1:
+      px = x[0]
+      py = x[1]
+      print py
+      for x2 in pointsObject1:
+        qx = x2[0]
+        qy = x2[1]
+        if abs(qx - px)< 0.005  and qy != py:
+          sameList.append(abs(qy-py))
+        else: 
+          pass
+  print sameList
 
+getBoundaries("polydata1")
+box = vtk.vtkBox()
+"""
 
 
 
@@ -162,6 +182,7 @@ actor1.SetMapper(mapper1)
 
 actor2 = vtk.vtkActor()
 actor2.SetMapper(mapper2)
+#actor2.GetProperty().EdgeVisibilityOn()
 
 renderer = vtk.vtkRenderer()
 #renderer.AddActor(actor1)
