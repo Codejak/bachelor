@@ -46,26 +46,32 @@ def storePoints(objectToBeStored):
     print "Something went wrong with the point storing..."
 
 storePoints("polydata1")
-"""
+
 def getBoundaries(objectToBeAnalyzed):
-  sameList = []
+  yWerte = []
+  xWerte = []
   if objectToBeAnalyzed == "polydata1":
-    for x in pointsObject1:
-      px = x[0]
-      py = x[1]
-      print py
-      for x2 in pointsObject1:
-        qx = x2[0]
-        qy = x2[1]
-        if abs(qx - px)< 0.005  and qy != py:
-          sameList.append(abs(qy-py))
+    for p in pointsObject1:
+      for p2 in pointsObject1:
+
+        if abs(p[0] - p2[0]) < 0.005 and p[2] == p2[2] and p[1] != p2[1]:
+          yWerte.append(abs(p[1]-p2[1]))
         else: 
           pass
-  print sameList
+
+        if abs(p[1] - p2[1]) < 0.005 and p[2] == p2[2] and p[0] != p2[0]:
+          xWerte.append(abs(p[0]-p2[0]))
+        else:
+          pass
+
+        
+
+  print yWerte
 
 getBoundaries("polydata1")
+
 box = vtk.vtkBox()
-"""
+
 
 
 
