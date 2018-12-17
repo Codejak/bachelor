@@ -30,7 +30,7 @@ pointsObject1 = []
 pointsObject2 = []
 
 box = vtk.vtkCubeSource()
-box.SetXLength()
+#box.SetXLength()
 
 def storePoints(objectToBeStored):
   if objectToBeStored == "polydata1":
@@ -48,7 +48,8 @@ def storePoints(objectToBeStored):
   else:
     print "Something went wrong with the point storing..."
 
-storePoints("polydata1")
+#storePoints("polydata1")
+
 
 def getBoxValues(objectTobeValued):
   if objectTobeValued == "polydata1":
@@ -72,14 +73,11 @@ def getBoxValues(objectTobeValued):
   return completeList
 
 
-def createQuader(objectToBeBoxed):
-  box.SetBounds(getBoxValues(objectToBeBoxed))
 
-createBox("polydata1")
-print box.GetBounds()
+
 
 extractGeometryBox = vtk.vtkExtractGeometry()
-#extractGeometryBox.SetImplicitFunction(box)
+extractGeometryBox.SetImplicitFunction(box)
 extractGeometryBox.SetInputData(box)
 
 
