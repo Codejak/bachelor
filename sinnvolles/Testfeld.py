@@ -48,7 +48,6 @@ def storePoints(objectToBeStored):
   else:
     print "Something went wrong with the point storing..."
 
-#storePoints("polydata1")
 
 
 def getBoxValues(objectTobeValued):
