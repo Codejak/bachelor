@@ -29,6 +29,9 @@ print pointNumberObject2
 pointsObject1 = []
 pointsObject2 = []
 
+box = vtk.vtkCubeSource()
+box.SetXLength()
+
 def storePoints(objectToBeStored):
   if objectToBeStored == "polydata1":
     for x in range(pointNumberObject1):
@@ -46,6 +49,48 @@ def storePoints(objectToBeStored):
     print "Something went wrong with the point storing..."
 
 storePoints("polydata1")
+
+
+def getBoxValues(objectTobeValued):
+  if objectTobeValued == "polydata1":
+    xList = []
+    yList = []
+    zList = []
+    completeList =[]
+
+    for p in pointsObject1:
+      xList.append(p[0])
+      yList.append(p[1])
+      zList.append(p[2])
+
+    completeList.append(min(xList))
+    completeList.append(max(xList))
+    completeList.append(min(yList))
+    completeList.append(max(yList))
+    completeList.append(min(zList))
+    completeList.append(max(zList))
+  print completeList
+  return completeList
+
+
+def createQuader(objectToBeBoxed):
+  box.SetBounds(getBoxValues(objectToBeBoxed))
+
+createBox("polydata1")
+print box.GetBounds()
+
+extractGeometryBox = vtk.vtkExtractGeometry()
+#extractGeometryBox.SetImplicitFunction(box)
+extractGeometryBox.SetInputData(box)
+
+
+
+booleanfilter = vtk.vtkBooleanOperationPolyDataFilter()
+booleanfilter.SetOperationToDifference()
+booleanfilter.SetInputConnection(0, extractGeometryBox.GetOutputPort())
+booleanfilter.SetInputConnection(1, reader1.GetOutputPort())
+
+
 """
 def getBoundaries(objectToBeAnalyzed):
   sameList = []
@@ -57,14 +102,13 @@ def getBoundaries(objectToBeAnalyzed):
       for x2 in pointsObject1:
         qx = x2[0]
         qy = x2[1]
-        if abs(qx - px)< 0.005  and qy != py:
+        if abs(qx - px)< 0.05  and qy != py:
           sameList.append(abs(qy-py))
         else: 
           pass
   print sameList
 
 getBoundaries("polydata1")
-box = vtk.vtkBox()
 """
 
 
@@ -170,12 +214,14 @@ volume2 = mass2.GetVolume()
 
 
 
-
 mapper1 = vtk.vtkPolyDataMapper()
 mapper1.SetInputConnection(reader1.GetOutputPort())
 
 mapper2 = vtk.vtkPolyDataMapper()
 mapper2.SetInputConnection(reader2.GetOutputPort())
+
+mapper3 = vtk.vtkPolyDataMapper()
+mapper3.SetInputConnection(booleanfilter.GetOutputPort())
 
 actor1 = vtk.vtkActor()
 actor1.SetMapper(mapper1)
@@ -184,9 +230,13 @@ actor2 = vtk.vtkActor()
 actor2.SetMapper(mapper2)
 #actor2.GetProperty().EdgeVisibilityOn()
 
+actor3 = vtk.vtkActor()
+actor3.SetMapper(mapper3)
+
 renderer = vtk.vtkRenderer()
 #renderer.AddActor(actor1)
 renderer.AddActor(actor2)
+renderer.AddActor(actor3)
 
 window = vtk.vtkRenderWindow()
 window.AddRenderer(renderer)
