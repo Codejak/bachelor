@@ -50,7 +50,6 @@ def storePoints(objectToBeStored):
 
 storePoints("polydata1")
 
-
 def getBoxValues(objectTobeValued):
   if objectTobeValued == "polydata1":
     xList = []
@@ -89,41 +88,6 @@ booleanfilter = vtk.vtkBooleanOperationPolyDataFilter()
 booleanfilter.SetOperationToDifference()
 booleanfilter.SetInputConnection(0, extractGeometryBox.GetOutputPort())
 booleanfilter.SetInputConnection(1, reader1.GetOutputPort())
-
-
-"""
-def getBoundaries(objectToBeAnalyzed):
-  sameList = []
-  if objectToBeAnalyzed == "polydata1":
-    for x in pointsObject1:
-      px = x[0]
-      py = x[1]
-      print py
-      for x2 in pointsObject1:
-        qx = x2[0]
-        qy = x2[1]
-        if abs(qx - px)< 0.05  and qy != py:
-          sameList.append(abs(qy-py))
-        else: 
-          pass
-  print sameList
-
-getBoundaries("polydata1")
-"""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
