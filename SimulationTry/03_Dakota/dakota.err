@@ -1,0 +1,4 @@
+Warning: total number of response functions is zero.  This is admissible in rare cases (e.g., nested overlays).
+Warning: total number of response functions is zero.  This is admissible in rare cases (e.g., nested overlays).
+
+Error: number of response functions must be greater than zero.

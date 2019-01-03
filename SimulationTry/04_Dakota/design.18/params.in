@@ -1,0 +1,16 @@
+                                          5 variables
+                      0.000000000000000e+00 |Abstand
+                      1.000781250000000e+00 |Ellipse1B
+                      1.000000000000000e+00 |Ellipse1A
+                      1.000000000000000e+00 |Ellipse2A
+                      1.000000000000000e+00 |Ellipse2B
+                                          1 functions
+                                          1 ASV_1:obj_fn
+                                          5 derivative_variables
+                                          1 DVV_1:|Abstand
+                                          2 DVV_2:|Ellipse1B
+                                          3 DVV_3:|Ellipse1A
+                                          4 DVV_4:|Ellipse2A
+                                          5 DVV_5:|Ellipse2B
+                                          0 analysis_components
+                                         18 eval_id
