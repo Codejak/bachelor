@@ -1,0 +1,30 @@
+
+
+method
+  sampling
+  sample_type lhs
+  samples = 100
+  seed = 12345
+
+variables
+  uniform_uncertain = 5
+  lower_bounds  0 0 0 0 0
+  upper_bounds  19.5449 2.32759 0.717913 23.5829 0.717913
+  descriptors  '|BaseLine01|DesignVariables|u3_v2_x' '|BaseLine01|DesignVariables|u3_v2_y' '|BaseLine01|DesignVariables|u3_v2_z' '|BaseLine01|DesignVariables|u4_v2_x' '|BaseLine01|DesignVariables|u4_v2_z'
+
+responses
+  num_response_functions = 0
+  response_descriptors = 
+  no_gradients
+  no_hessians
+
+interface
+  fork
+  analysis_driver = 'fdakota_client.exe'
+  verbatim  parameters_file = 'params.in'
+  results_file    = 'results.out'
+  work_directory directory_tag
+  named 'design' file_save directory_save
+
+  asynchronous
+  evaluation_concurrency = 8

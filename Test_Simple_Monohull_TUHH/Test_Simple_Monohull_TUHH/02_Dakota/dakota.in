@@ -1,0 +1,47 @@
+
+
+method
+  moga
+  output debug
+  seed = 12345
+  crossover_type shuffle_random
+  num_offspring = 2 num_parents = 2
+  crossover_rate = 0.8
+  mutation_type replace_uniform
+  mutation_rate = 0.1
+  fitness_type domination_count
+  replacement_type below_limit = 6
+  shrinkage_percentage = 0.9
+  niching_type distance 0.15
+  postprocessor_type
+  orthogonal_distance 0.05
+  convergence_type metric_tracker
+  percent_change = 0.05 num_generations = 10
+  max_function_evaluations = 50
+  population_size = 30
+  max_iterations = 10
+ 
+variables
+  continuous_design = 5
+  initial_point  19.5449 2.32759 0.717913 23.5829 0.717913
+  lower_bounds  16 2 0.5 21 0.5
+  upper_bounds  22 2.5 1 25 1
+  descriptors  '|BaseLine01|DesignVariables|u3_v2_x' '|BaseLine01|DesignVariables|u3_v2_y' '|BaseLine01|DesignVariables|u3_v2_z' '|BaseLine01|DesignVariables|u4_v2_x' '|BaseLine01|DesignVariables|u4_v2_z'
+
+responses
+  objective_functions = 7
+  nonlinear_inequality_constraints = 0
+  nonlinear_equality_constraints = 0
+  no_gradients
+  no_hessians
+  
+interface
+  fork
+  analysis_driver = 'fdakota_client.exe'
+  verbatim  parameters_file = 'params.in'
+  results_file    = 'results.out'
+  work_directory directory_tag
+  named 'design' file_save directory_save
+
+  asynchronous
+  evaluation_concurrency = 8
