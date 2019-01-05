@@ -5,48 +5,80 @@ final_shape = "final_shape.stl"
 initial_shape = "initial_shape.stl"
 
 
-#reading the shit
-reader1 = vtk.vtkSTLReader()
-reader1.SetFileName(final_shape)
-reader1.Update()
+#define the class which creates objects store the data of the STL files
+class STL_Object:
+  numberOfSTLObjects = 0
+  # initiation of the objects
+  def __init__(self, fileName):
 
-reader2 = vtk.vtkSTLReader()
-reader2.SetFileName(initial_shape)
-reader2.Update()
+    #increasing the objectcounter
+    STL_Object.numberOfSTLObjects += 1
 
-polydata1 = vtk.vtkPolyData()
-polydata1 = reader1.GetOutput()
-polydata2 = vtk.vtkPolyData()
-polydata2 = reader2.GetOutput()
+    #definening the attributes
+    self.fileName = fileName
+    self.objectPoints = []
+    self.xCoordinates = []
+    self.yCoordinates = []
+    self.zCoordinates = []
+
+    #reads the Objekt from the stl data
+    self.reader = vtk.vtkSTLReader()
+    self.reader.SetFileName(fileName)
+    self.reader.Update()
+    self.polydata = vtk.vtkPolyData()
+    self.polydata = self.reader.GetOutput()
+
+    #determine number of Points
+    self.numberOfPoints = self.polydata.GetNumberOfPoints()
+    print "Number of Points in %s updated: %s" %(self.fileName, self.numberOfPoints)
 
 
-pointNumberObject1 = polydata1.GetNumberOfPoints()
-pointNumberObject2 = polydata2.GetNumberOfPoints()
+  # determine the (new) number of points in the object
+  def updateNumberOfPoints(self):
+    self.numberOfPoints = self.polydata.GetNumberOfPoints()
+    print "Number of Points in %s updated: %d" %(self.fileName, self.numberOfPoints)
 
-print pointNumberObject1
-print pointNumberObject2
 
-pointsObject1 = []
-pointsObject2 = []
+  #store the point from the STL file into arrays to work with
+  def storePoints(self):
+    self.objectPoints = []
+    for x in range(self.numberOfPoints):
+      self.objectPoints.append(self.polydata.GetPoints().GetPoint(x))
+    print "Points of %s succesfully stored. \nLength of the array: %d" %(self.fileName, len(self.objectPoints))
+    self.storeCoordinates()
 
+
+  #Store the individual axes-coordianes in arrays
+  def storeCoordinates(self):
+    self.xCoordinates = []
+    self.yCoordinates = []
+    self.zCoordinates = []
+    for p in self.objectPoints:
+       self.yCoordinates.append(p[1])
+      self.zCoordinates.append(p[2])
+    print "Coordinates of %s succesfully stored. \nLength of the arrays: \n %d \n %d \n %d" %(self.fileName, len(self.xCoordinates), len(self.yCoordinates),len(self.zCoordinates))
+
+
+
+
+object1 = STL_Object("final_shape.stl")
+#object1.updateNumberOfPoints()
+object1.storePoints()
+
+
+
+
+
+
+
+"""
 box = vtk.vtkCubeSource()
 
-def storePoints(objectToBeStored):
-  if objectToBeStored == "polydata1":
-    for x in range(pointNumberObject1):
-      pointsObject1.append(polydata1.GetPoints().GetPoint(x))
-    print "Points of object 1 succesfully stored"
-    print len(pointsObject1)
+box.SetBounds(getBoxValues("polydata1"))
 
-  elif objectToBeStored == "polydata2":
-    for x in range(pointNumberObject2):
-      pointsObject2.append(polydata2.GetPoints().GetPoint(x))
-    print "Points of object 2 succesfully stored"
-    print len(pointsObject2)
-
-  else:
-    print "Something went wrong with the point storing..."
-
+triangledBox = vtk.vtkTriangleFilter()
+triangledBox.SetInputConnection(box.GetOutputPort())
+triangledBox.Update()
 
 def getBoxValues(objectTobeValued):
   if objectTobeValued == "polydata1":
@@ -70,12 +102,9 @@ def getBoxValues(objectTobeValued):
   return completeList
 
 
-storePoints("polydata1")
-box.SetBounds(getBoxValues("polydata1"))
 
-triangledBox = vtk.vtkTriangleFilter()
-triangledBox.SetInputConnection(box.GetOutputPort())
-triangledBox.Update()
+
+
 
 
 booleanfilter = vtk.vtkBooleanOperationPolyDataFilter()
@@ -83,49 +112,15 @@ booleanfilter.SetOperationToDifference()
 booleanfilter.SetInputConnection(1, reader1.GetOutputPort())
 booleanfilter.SetInputConnection(0, triangledBox.GetOutputPort())
 booleanfilter.SetTolerance(0.000000000000000001)
-
-
-
-"""
-#smooth the shit
-smooth1 = vtk.vtkSmoothPolyDataFilter()
-smooth1.SetInputConnection(reader1.GetOutputPort())
-smooth1.Update()
-
-#clean the shit
-clean1 = vtk.vtkCleanPolyData()
-clean1.SetInputConnection(smooth1.GetOutputPort())
-clean1.ConvertStripsToPolysOn()
-clean1.ConvertPolysToLinesOn()
-clean1.ConvertLinesToPointsOn()
-clean1.Update()
-
-#triangle that shit
-triangle1 = vtk.vtkTriangleFilter()
-triangle1.SetInputConnection(clean1.GetOutputPort())
-triangle1.PassVertsOff()
-triangle1.PassLinesOff()
-triangle1.Update()
-
-#normal that shit
-normal1 = vtk.vtkPolyDataNormals()
-normal1.SetInputConnection(triangle1.GetOutputPort())
-normal1.ComputePointNormalsOn()
-normal1.ComputeCellNormalsOff()
-normal1.SplittingOff()
-normal1.ConsistencyOn()
-normal1.AutoOrientNormalsOff()
-normal1.Update()
-
-booleanfilter = vtk.vtkBooleanOperationPolyDataFilter()
-booleanfilter.SetOperationToDifference()
-booleanfilter.SetInputConnection(0, normal1.GetOutputPort())
-booleanfilter.SetInputConnection(1, normal2.GetOutputPort())
 """
 
 
 
 
+
+
+
+"""
 mass1 = vtk.vtkMassProperties()
 mass1.SetInputConnection(reader1.GetOutputPort())
 mass1.Update()
@@ -142,14 +137,19 @@ volume2 = mass2.GetVolume()
 
 
 
+
+
+
+
+
 mapper1 = vtk.vtkPolyDataMapper()
 mapper1.SetInputConnection(reader1.GetOutputPort())
 
 mapper2 = vtk.vtkPolyDataMapper()
 mapper2.SetInputConnection(reader2.GetOutputPort())
 
-mapper3 = vtk.vtkPolyDataMapper()
-mapper3.SetInputConnection(booleanfilter.GetOutputPort())
+#mapper3 = vtk.vtkPolyDataMapper()
+#mapper3.SetInputConnection(booleanfilter.GetOutputPort())
 
 actor1 = vtk.vtkActor()
 actor1.SetMapper(mapper1)
@@ -165,7 +165,34 @@ actor3.GetProperty().EdgeVisibilityOn()
 renderer = vtk.vtkRenderer()
 #renderer.AddActor(actor1)
 #renderer.AddActor(actor2)
-renderer.AddActor(actor3)
+#renderer.AddActor(actor3)
+renderer.SetBackground(1,1,1)
+
+window = vtk.vtkRenderWindow()
+window.AddRenderer(renderer)
+
+interactor = vtk.vtkRenderWindowInteractor()
+interactor.SetRenderWindow(window)
+
+axes = vtk.vtkAxesActor()
+widget = vtk.vtkOrientationMarkerWidget()
+widget.SetOrientationMarker(axes)
+widget.SetInteractor(interactor)
+widget.SetEnabled(1)
+widget.InteractiveOn()
+
+window.Render()
+interactor.Initialize()
+interactor.Start() 
+"""
+mapper1 = vtk.vtkPolyDataMapper()
+mapper1.SetInputConnection(object1.reader.GetOutputPort())
+
+actor1 = vtk.vtkActor()
+actor1.SetMapper(mapper1)
+
+renderer = vtk.vtkRenderer()
+renderer.AddActor(actor1)
 renderer.SetBackground(1,1,1)
 
 window = vtk.vtkRenderWindow()
