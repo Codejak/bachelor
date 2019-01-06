@@ -4,7 +4,6 @@ from vtk import *
 final_shape = "final_shape.stl"
 initial_shape = "initial_shape.stl"
 
-
 #define the class which creates objects store the data of the STL files
 class STL_Object:
   numberOfSTLObjects = 0
@@ -20,6 +19,12 @@ class STL_Object:
     self.xCoordinates = []
     self.yCoordinates = []
     self.zCoordinates = []
+    self.maxX = 0
+    self.minX = 0
+    self.maxY = 0 
+    self.minY = 0
+    self.maxZ = 0
+    self.minZ = 0
 
     #reads the Objekt from the stl data
     self.reader = vtk.vtkSTLReader()
@@ -30,41 +35,124 @@ class STL_Object:
 
     #determine number of Points
     self.numberOfPoints = self.polydata.GetNumberOfPoints()
-    print "Number of Points in %s updated: %s" %(self.fileName, self.numberOfPoints)
+    print "\nTrying to store -%s-! Point Number:%s" %(self.fileName, self.numberOfPoints)
 
-
-  # determine the (new) number of points in the object
-  def updateNumberOfPoints(self):
-    self.numberOfPoints = self.polydata.GetNumberOfPoints()
-    print "Number of Points in %s updated: %d" %(self.fileName, self.numberOfPoints)
-
-
-  #store the point from the STL file into arrays to work with
-  def storePoints(self):
+    #store the point from the STL file into arrays to work with
     self.objectPoints = []
     for x in range(self.numberOfPoints):
       self.objectPoints.append(self.polydata.GetPoints().GetPoint(x))
-    print "Points of %s succesfully stored. \nLength of the array: %d" %(self.fileName, len(self.objectPoints))
-    self.storeCoordinates()
+    print "\n%s succesfully stored. Length of the storing array: %d" %(self.fileName, len(self.objectPoints))
 
 
-  #Store the individual axes-coordianes in arrays
-  def storeCoordinates(self):
+
+
+  #determine the (new) number of points in the object
+  def updateNumberOfPoints(self):
+    self.numberOfPoints = len(self.objectPoints)
+    print "\nNumber of Points in %s updated: %s" %(self.fileName, self.numberOfPoints)
+
+
+  #store the individual axes-coordianes in arrays
+  def updateCoordinates(self):
     self.xCoordinates = []
     self.yCoordinates = []
     self.zCoordinates = []
     for p in self.objectPoints:
-       self.yCoordinates.append(p[1])
+      self.xCoordinates.append(p[0])
+      self.yCoordinates.append(p[1])
       self.zCoordinates.append(p[2])
-    print "Coordinates of %s succesfully stored. \nLength of the arrays: \n %d \n %d \n %d" %(self.fileName, len(self.xCoordinates), len(self.yCoordinates),len(self.zCoordinates))
+    self.maxX = max(self.xCoordinates)
+    self.minX = min(self.xCoordinates)
+    self.maxY = max(self.yCoordinates)
+    self.minY = min(self.yCoordinates)
+    self.maxZ = max(self.zCoordinates)
+    self.minZ = min(self.zCoordinates)
+    print "\nCoordinates of %s succesfully updated. Length of the arrays: %s, %s, %s \nThese are the min/max coordinates: X[%s,%s], Y[%s,%s], Z[%s,%s] " %(self.fileName, len(self.xCoordinates), len(self.yCoordinates), len(self.zCoordinates), self.minX,self.maxX,self.minY,self.maxY,self.minZ,self.maxZ)
+    self.updateNumberOfPoints()
+
+
+  #get rid of the irrelevant points
+  def deleteBoxPoints(self):
+    newlist = []
+    for i in self.objectPoints:
+      if (self.minX - 0.1) < i[0] < (self.minX + 0.1):
+        pass
+      elif (self.maxX - 0.1) < i[0] < (self.maxX + 0.1):
+        pass
+      if (self.minY - 0.1) < i[1] < (self.minY + 0.1):
+        pass
+      elif (self.maxY - 0.1) < i[1] < (self.maxY + 0.1):
+        pass
+      else:
+        newlist.append(i)
+      self.objectPoints = newlist
+      #print newlist
+
+
+
+  def getRidOfShit(self):
+    self.box = vtk.vtkCubeSource()
+    completeList = []
+    completeList.append(self.minX + 0.01)
+    completeList.append(self.maxX - 0.01)
+    completeList.append(self.minY + 0.01)
+    completeList.append(self.maxY - 0.01) 
+    completeList.append(self.minZ + 0.001)
+    completeList.append(self.maxZ - 0.001)
+    self.box.SetBounds(completeList)
+
+    self.triangledBox = vtk.vtkTriangleFilter()
+    self.triangledBox.SetInputConnection(self.box.GetOutputPort())
+    self.triangledBox.Update()
+
+    self.booleanfilter = vtk.vtkBooleanOperationPolyDataFilter()
+    self.booleanfilter.SetOperationToDifference()
+    self.booleanfilter.SetInputConnection(1, self.reader.GetOutputPort())
+    self.booleanfilter.SetInputConnection(0, self.triangledBox.GetOutputPort())
+    self.booleanfilter.SetTolerance(0.000000000000000001)
 
 
 
 
-object1 = STL_Object("final_shape.stl")
-#object1.updateNumberOfPoints()
-object1.storePoints()
 
+
+
+  #vizualize the single objects 
+  def visualize(self):
+    """
+    self.Points = vtk.vtkPoints()
+    self.newPolydata = vtk.vtkPolyData()
+    for i in self.objectPoints:
+      self.Points.InsertNextPoint(i)
+    self.newPolydata.SetPoints(self.Points)
+    self.surfaceFilter = vtk.vtkSurfaceReconstructionFilter()
+    self.surfaceFilter.SetInputData(self.newPolydata)
+    self.contourFilter = vtk.vtkContourFilter()
+    self.contourFilter.SetInputConnection(self.surfaceFilter.GetOutputPort())
+    #self.contourFilter.SetValue(0, 0.0)
+
+    self.reverse = vtk.vtkReverseSense()
+    self.reverse.SetInputConnection(self.contourFilter.GetOutputPort())
+    self.reverse.ReverseCellsOn()
+    self.reverse.ReverseNormalsOn()
+    """
+
+    self.mapper = vtk.vtkPolyDataMapper()
+    self.mapper.SetInputConnection(self.booleanfilter.GetOutputPort())
+    self.mapper.ScalarVisibilityOff()
+    self.actor = vtk.vtkActor()
+    self.actor.SetMapper(self.mapper)
+    self.actor.GetProperty().EdgeVisibilityOn()
+
+
+
+
+
+
+object1 = STL_Object("initial_shape.stl")
+object1.updateCoordinates()
+object1.getRidOfShit()
+object1.visualize()
 
 
 
@@ -190,9 +278,11 @@ mapper1.SetInputConnection(object1.reader.GetOutputPort())
 
 actor1 = vtk.vtkActor()
 actor1.SetMapper(mapper1)
+actor1.GetProperty().EdgeVisibilityOn()
 
 renderer = vtk.vtkRenderer()
-renderer.AddActor(actor1)
+renderer.AddActor(object1.actor)
+#enderer.AddActor(actor1)
 renderer.SetBackground(1,1,1)
 
 window = vtk.vtkRenderWindow()
@@ -211,3 +301,11 @@ widget.InteractiveOn()
 window.Render()
 interactor.Initialize()
 interactor.Start() 
+
+
+"""     
+      if (self.minZ - 0.0001) < i[2] < (self.minZ + 0.0001):
+        pass
+      elif (self.maxZ - 0.0001) < i[2] < (self.maxZ + 0.0001):
+        pass
+"""
