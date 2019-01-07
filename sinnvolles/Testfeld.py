@@ -13,7 +13,7 @@ class STL_Object:
     #increasing the objectcounter
     STL_Object.numberOfSTLObjects += 1
 
-    #definening the attributes
+    #defining the attributes
     self.fileName = fileName
     self.objectPoints = []
     self.xCoordinates = []
@@ -26,14 +26,14 @@ class STL_Object:
     self.maxZ = 0
     self.minZ = 0
 
-    #reads the Objekt from the stl data
+    #reads the Objekt from the stl file
     self.reader = vtk.vtkSTLReader()
     self.reader.SetFileName(fileName)
     self.reader.Update()
     self.polydata = vtk.vtkPolyData()
     self.polydata = self.reader.GetOutput()
 
-    #determine number of Points
+    #determine the number of Points
     self.numberOfPoints = self.polydata.GetNumberOfPoints()
     print "\nTrying to store -%s-! Point Number:%s" %(self.fileName, self.numberOfPoints)
 
@@ -97,8 +97,8 @@ class STL_Object:
     completeList.append(self.maxX - 0.01)
     completeList.append(self.minY + 0.01)
     completeList.append(self.maxY - 0.01) 
-    completeList.append(self.minZ + 0.001)
-    completeList.append(self.maxZ - 0.001)
+    completeList.append(self.minZ + 0.0000001)
+    completeList.append(self.maxZ - 0.0000001)
     self.box.SetBounds(completeList)
 
     self.triangledBox = vtk.vtkTriangleFilter()
@@ -107,43 +107,55 @@ class STL_Object:
 
     self.booleanfilter = vtk.vtkBooleanOperationPolyDataFilter()
     self.booleanfilter.SetOperationToDifference()
+    self.booleanfilter.SetTolerance(0.000000000001)
     self.booleanfilter.SetInputConnection(1, self.reader.GetOutputPort())
     self.booleanfilter.SetInputConnection(0, self.triangledBox.GetOutputPort())
-    self.booleanfilter.SetTolerance(0.000000000000000001)
+
+    self.clean = vtk.vtkCleanPolyData()
+    self.clean.SetInputConnection(self.booleanfilter.GetOutputPort())
+    self.clean.SetTolerance(0.00001)
+
+    self.triangles = vtk.vtkTriangleFilter()
+    self.triangles.SetInputConnection(self.clean.GetOutputPort())
+    self.triangles.Update()
+
+    self.polydata = self.triangles.GetOutput()
+    self.numberOfPoints = self.polydata.GetNumberOfPoints()
+    self.objectPoints = []
+    for x in range(self.numberOfPoints):
+      self.objectPoints.append(self.polydata.GetPoints().GetPoint(x))
+    self.updateCoordinates()
 
 
+    """
+    self.triangles = vtk.vtkTriangleFilter()
+    self.triangles.SetInputConnection(self.booleanfilter.GetOutputPort())
+    self.triangles.Update()
 
+
+    self.triangles2 = vtk.vtkTriangleFilter()
+    self.triangles2.SetInputConnection(self.clean.GetOutputPort())
+    self.triangles2.Update()
+
+    self.writer = vtk.vtkSTLWriter()
+    self.writer.SetFileName("file.stl")
+    self.writer.SetInputConnection(self.triangles2.GetOutputPort())
+    self.writer.Write()
+    """
 
 
 
 
   #vizualize the single objects 
   def visualize(self):
-    """
-    self.Points = vtk.vtkPoints()
-    self.newPolydata = vtk.vtkPolyData()
-    for i in self.objectPoints:
-      self.Points.InsertNextPoint(i)
-    self.newPolydata.SetPoints(self.Points)
-    self.surfaceFilter = vtk.vtkSurfaceReconstructionFilter()
-    self.surfaceFilter.SetInputData(self.newPolydata)
-    self.contourFilter = vtk.vtkContourFilter()
-    self.contourFilter.SetInputConnection(self.surfaceFilter.GetOutputPort())
-    #self.contourFilter.SetValue(0, 0.0)
-
-    self.reverse = vtk.vtkReverseSense()
-    self.reverse.SetInputConnection(self.contourFilter.GetOutputPort())
-    self.reverse.ReverseCellsOn()
-    self.reverse.ReverseNormalsOn()
-    """
 
     self.mapper = vtk.vtkPolyDataMapper()
-    self.mapper.SetInputConnection(self.booleanfilter.GetOutputPort())
+    self.mapper.SetInputData(self.polydata)
+    #self.mapper.SetInputConnection(self.booleanfilter.GetOutputPort())
     self.mapper.ScalarVisibilityOff()
     self.actor = vtk.vtkActor()
     self.actor.SetMapper(self.mapper)
     self.actor.GetProperty().EdgeVisibilityOn()
-
 
 
 
