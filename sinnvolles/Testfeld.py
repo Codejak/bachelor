@@ -1,6 +1,7 @@
 from vtk import *
 
 
+
 final_shape = "final_shape.stl"
 initial_shape = "initial_shape.stl"
 
@@ -42,8 +43,6 @@ class STL_Object:
     for x in range(self.numberOfPoints):
       self.objectPoints.append(self.polydata.GetPoints().GetPoint(x))
     print "\n%s succesfully stored. Length of the storing array: %d" %(self.fileName, len(self.objectPoints))
-
-
 
 
   #determine the (new) number of points in the object
@@ -89,7 +88,6 @@ class STL_Object:
         newlist.append(i)
       self.objectPoints = newlist
   """
-
 
   #reverse the STL file
   def buildNegative(self):
@@ -149,7 +147,8 @@ class STL_Object:
     """
 
 
-
+  #determine the surface area of the object
+  def determineSurfaceArea(self):
 
   #vizualize the object 
   def visualize(self):
@@ -164,14 +163,61 @@ class STL_Object:
 
 
 
+#determine a value based on the comparison of 2 object
+#the method of comparison is developed on the basis of the Hamming distance
+def determineHD(object1):
+  distList = []
+  distListHD = []
+  addDist = 0
+  addDistHD = 0
+  avgDist = 0
+  avgDistHD = 0
+  stdDev = 0
+  finalValue = 0
+  for x in object1.objectPoints:
+    pointDistList = []
+    for y in object1.objectPoints:
+      if 0<abs(x[0] - y[0])<0.001 or 0<abs(x[1] - y[1])<0.001 or 0<abs(x[2] - y[2])<0.001:
+        if vtkMath.Distance2BetweenPoints(x,y) > 0:
+          pointDistList.append(vtkMath.sqrt(vtkMath.Distance2BetweenPoints(x,y)))
+          distList.append(vtkMath.sqrt(vtkMath.Distance2BetweenPoints(x,y)))
+    distListHD.append(max(pointDistList))
+
+  for a in range(len(distList)):
+    addDist += distList[a]
+  avgDist = addDist/len(distList)
+
+  for b in range(len(distListHD)):
+    addDistHD += distListHD[b]
+  avgDistHD = addDistHD/len(distListHD)
+
+  for c in range(len(distList)):
+    stdDev += (c - avgDist)**2
+  stdDev = vtkMath.sqrt(stdDev/len(distListHD))
 
 
-object1 = STL_Object("initial_shape.stl")
-object1.updateCoordinates()
-object1.buildNegative()
-object1.visualize()
 
 
+  print len(distanceList)
+
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+objectone = STL_Object("initial_shape.stl")
+objectone.updateCoordinates()
+objectone.buildNegative()
+objectone.visualize()
 
 
 
@@ -192,7 +238,7 @@ def getBoxValues(objectTobeValued):
     zList = []
     completeList =[]
 
-    for p in pointsObject1:
+    for p in pointsobjectone:
       xList.append(p[0])
       yList.append(p[1])
       zList.append(p[2])
@@ -236,70 +282,11 @@ mass2.SetInputConnection(reader2.GetOutputPort())
 mass2.Update()
 volume2 = mass2.GetVolume()
 
-
-
-
-
-
-
-
-
-
-
-
-mapper1 = vtk.vtkPolyDataMapper()
-mapper1.SetInputConnection(reader1.GetOutputPort())
-
-mapper2 = vtk.vtkPolyDataMapper()
-mapper2.SetInputConnection(reader2.GetOutputPort())
-
-#mapper3 = vtk.vtkPolyDataMapper()
-#mapper3.SetInputConnection(booleanfilter.GetOutputPort())
-
-actor1 = vtk.vtkActor()
-actor1.SetMapper(mapper1)
-
-actor2 = vtk.vtkActor()
-actor2.SetMapper(mapper2)
-#actor2.GetProperty().EdgeVisibilityOn()
-
-actor3 = vtk.vtkActor()
-actor3.SetMapper(mapper3)
-actor3.GetProperty().EdgeVisibilityOn()
-
-renderer = vtk.vtkRenderer()
-#renderer.AddActor(actor1)
-#renderer.AddActor(actor2)
-#renderer.AddActor(actor3)
-renderer.SetBackground(1,1,1)
-
-window = vtk.vtkRenderWindow()
-window.AddRenderer(renderer)
-
-interactor = vtk.vtkRenderWindowInteractor()
-interactor.SetRenderWindow(window)
-
-axes = vtk.vtkAxesActor()
-widget = vtk.vtkOrientationMarkerWidget()
-widget.SetOrientationMarker(axes)
-widget.SetInteractor(interactor)
-widget.SetEnabled(1)
-widget.InteractiveOn()
-
-window.Render()
-interactor.Initialize()
-interactor.Start() 
 """
-mapper1 = vtk.vtkPolyDataMapper()
-mapper1.SetInputConnection(object1.reader.GetOutputPort())
 
-actor1 = vtk.vtkActor()
-actor1.SetMapper(mapper1)
-actor1.GetProperty().EdgeVisibilityOn()
 
 renderer = vtk.vtkRenderer()
-renderer.AddActor(object1.actor)
-#enderer.AddActor(actor1)
+renderer.AddActor(objectone.actor)
 renderer.SetBackground(1,1,1)
 
 window = vtk.vtkRenderWindow()
