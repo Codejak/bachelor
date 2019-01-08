@@ -61,6 +61,8 @@ class STL_Object:
       self.xCoordinates.append(p[0])
       self.yCoordinates.append(p[1])
       self.zCoordinates.append(p[2])
+
+    #determine the extrema 
     self.maxX = max(self.xCoordinates)
     self.minX = min(self.xCoordinates)
     self.maxY = max(self.yCoordinates)
@@ -70,7 +72,7 @@ class STL_Object:
     print "\nCoordinates of %s succesfully updated. Length of the arrays: %s, %s, %s \nThese are the min/max coordinates: X[%s,%s], Y[%s,%s], Z[%s,%s] " %(self.fileName, len(self.xCoordinates), len(self.yCoordinates), len(self.zCoordinates), self.minX,self.maxX,self.minY,self.maxY,self.minZ,self.maxZ)
     self.updateNumberOfPoints()
 
-
+  """
   #get rid of the irrelevant points
   def deleteBoxPoints(self):
     newlist = []
@@ -86,11 +88,12 @@ class STL_Object:
       else:
         newlist.append(i)
       self.objectPoints = newlist
-      #print newlist
+  """
 
 
-
-  def getRidOfShit(self):
+  #reverse the STL file
+  def buildNegative(self):
+    #create the box to build the negative with
     self.box = vtk.vtkCubeSource()
     completeList = []
     completeList.append(self.minX + 0.01)
@@ -105,6 +108,7 @@ class STL_Object:
     self.triangledBox.SetInputConnection(self.box.GetOutputPort())
     self.triangledBox.Update()
 
+    #get the difference between the box and the file
     self.booleanfilter = vtk.vtkBooleanOperationPolyDataFilter()
     self.booleanfilter.SetOperationToDifference()
     self.booleanfilter.SetTolerance(0.000000000001)
@@ -119,6 +123,7 @@ class STL_Object:
     self.triangles.SetInputConnection(self.clean.GetOutputPort())
     self.triangles.Update()
 
+    #rewrite polydata
     self.polydata = self.triangles.GetOutput()
     self.numberOfPoints = self.polydata.GetNumberOfPoints()
     self.objectPoints = []
@@ -146,7 +151,7 @@ class STL_Object:
 
 
 
-  #vizualize the single objects 
+  #vizualize the object 
   def visualize(self):
 
     self.mapper = vtk.vtkPolyDataMapper()
@@ -163,7 +168,7 @@ class STL_Object:
 
 object1 = STL_Object("initial_shape.stl")
 object1.updateCoordinates()
-object1.getRidOfShit()
+object1.buildNegative()
 object1.visualize()
 
 
