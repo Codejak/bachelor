@@ -165,33 +165,33 @@ class STL_Object:
 
 #determine a value based on the comparison of 2 object
 #the method of comparison is developed on the basis of the Hamming distance
-def determineHD(object1):
+def determineAxisHD(object1, axisCode):
   distList = []
   distListHD = []
-  addDist = 0
-  addDistHD = 0
+  addedDist = 0
+  addedDistHD = 0
   avgDist = 0
   avgDistHD = 0
   stdDev = 0
-  finalValue = 0
+  finalValues = []
   for x in object1.objectPoints:
     pointDistList = []
     for y in object1.objectPoints:
-      if 0<abs(x[0] - y[0])<0.001 or 0<abs(x[1] - y[1])<0.001 or 0<abs(x[2] - y[2])<0.001:
+      if 0<abs(x[axisCode] - y[axisCode])<0.001:
         if vtkMath.Distance2BetweenPoints(x,y) > 0:
           pointDistList.append(vtkMath.sqrt(vtkMath.Distance2BetweenPoints(x,y)))
           distList.append(vtkMath.sqrt(vtkMath.Distance2BetweenPoints(x,y)))
     distListHD.append(max(pointDistList))
 
   for a in range(len(distList)):
-    addDist += distList[a]
-  avgDist = addDist/len(distList)
+    addedDist += distList[a]
+  avgDist = addedDist/len(distList)
 
   for b in range(len(distListHD)):
-    addDistHD += distListHD[b]
-  avgDistHD = addDistHD/len(distListHD)
+    addedDistHD += distListHD[b]
+  avgDistHD = addedDistHD/len(distListHD)
 
-  for c in range(len(distList)):
+  for c in distList:
     stdDev += (c - avgDist)**2
   stdDev = vtkMath.sqrt(stdDev/len(distListHD))
 
