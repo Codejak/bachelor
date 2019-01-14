@@ -1,5 +1,5 @@
 from vtk import *
-
+from math import sqrt
 
 
 final_shape = "final_shape.stl"
@@ -148,11 +148,10 @@ class STL_Object:
 
 
   #determine the surface area of the object
-  def determineSurfaceArea(self):
+  #def determineSurfaceArea(self):
 
   #vizualize the object 
   def visualize(self):
-
     self.mapper = vtk.vtkPolyDataMapper()
     self.mapper.SetInputData(self.polydata)
     #self.mapper.SetInputConnection(self.booleanfilter.GetOutputPort())
@@ -162,10 +161,10 @@ class STL_Object:
     self.actor.GetProperty().EdgeVisibilityOn()
 
 
-
 #determine a value based on the comparison of 2 object
 #the method of comparison is developed on the basis of the Hamming distance
-def determineAxisHD(object1, axisCode):
+
+def determineAxisHD(object1, axisNumber):
   distList = []
   distListHD = []
   addedDist = 0
@@ -173,36 +172,39 @@ def determineAxisHD(object1, axisCode):
   avgDist = 0
   avgDistHD = 0
   stdDev = 0
+  stdDevHD = 0
   finalValues = []
   for x in object1.objectPoints:
     pointDistList = []
     for y in object1.objectPoints:
-      if 0<abs(x[axisCode] - y[axisCode])<0.001:
+      if 0<abs(x[axisNumber] - y[axisNumber])<0.001:
         if vtkMath.Distance2BetweenPoints(x,y) > 0:
-          pointDistList.append(vtkMath.sqrt(vtkMath.Distance2BetweenPoints(x,y)))
-          distList.append(vtkMath.sqrt(vtkMath.Distance2BetweenPoints(x,y)))
+          pointDistList.append(sqrt(vtkMath.Distance2BetweenPoints(x,y)))
+          distList.append(sqrt(vtkMath.Distance2BetweenPoints(x,y)))
     distListHD.append(max(pointDistList))
 
   for a in range(len(distList)):
     addedDist += distList[a]
   avgDist = addedDist/len(distList)
+  finalValues.append(avgDist)
 
   for b in range(len(distListHD)):
     addedDistHD += distListHD[b]
   avgDistHD = addedDistHD/len(distListHD)
+  finalValues.append(avgDistHD)
 
-  for c in distList:
+  for c in distListHD:
     stdDev += (c - avgDist)**2
-  stdDev = vtkMath.sqrt(stdDev/len(distListHD))
+  stdDev = sqrt(stdDev/len(distListHD))
+  finalValues.append(stdDev)
 
+  for d in distListHD:
+    stdDevHD += (d - avgDistHD)**2
+  stdDevHD = sqrt(stdDev/len(distListHD))
+  finalValues.append(stdDevHD)
+  print len(distList), len(distListHD),
 
-
-
-  print len(distanceList)
-
-
-          
-
+  return finalValues
 
 
 
@@ -218,6 +220,7 @@ objectone = STL_Object("initial_shape.stl")
 objectone.updateCoordinates()
 objectone.buildNegative()
 objectone.visualize()
+print determineAxisHD(objectone, 0)
 
 
 
