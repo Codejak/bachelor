@@ -1,0 +1,23 @@
+Moving C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/Real project/Test_Simple_Monohull_real_one/manual_results/mainobject/Runner/input/geomExpo.stl to C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/Real project/Test_Simple_Monohull_real_one/manual_results/mainobject/Runner//geomExpo.stl
+
+[Captured output from application C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/run.bat]
+
+
+C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\manual_results\mainobject\Runner>cd C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\ 
+
+C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles>"C:\Program Files\VTK 7.1.1\bin\vtkpython" C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Testfeld.py 
+
+Trying to store -initial_shape.stl-! Point Number:91572
+
+initial_shape.stl succesfully stored. Length of the storing array: 91572
+
+Coordinates of initial_shape.stl succesfully updated. Length of the arrays: 91572, 91572, 91572 
+These are the min/max coordinates: X[-0.40000000596,0.800000011921], Y[-0.10000000149,0.119999997318], Z[-2.77555756156e-17,1.0] 
+
+Number of Points in initial_shape.stl updated: 91572
+
+Coordinates of initial_shape.stl succesfully updated. Length of the arrays: 594, 594, 594 
+These are the min/max coordinates: X[1.51198270484e-12,0.019999999553], Y[-0.00999881606549,0.00999879837036], Z[1.00000001169e-07,0.999999880791] 
+
+Number of Points in initial_shape.stl updated: 594
+37634 594 [0.4479004011215292, 0.833478675435467, 0.45188709348517914, 0.027581745460267405]
