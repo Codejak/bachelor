@@ -5,6 +5,12 @@ from math import sqrt
 final_shape = "final_shape.stl"
 initial_shape = "initial_shape.stl"
 
+aplha = 1
+beta = 1
+gamma = 1
+
+
+
 #define the class which creates objects store the data of the STL files
 class STL_Object:
   numberOfSTLObjects = 0
@@ -26,6 +32,7 @@ class STL_Object:
     self.minY = 0
     self.maxZ = 0
     self.minZ = 0
+    self.avgMaxDist = 0
 
     #reads the Objekt from the stl file
     self.reader = vtk.vtkSTLReader()
@@ -39,16 +46,19 @@ class STL_Object:
     print "\nTrying to store -%s-! Point Number:%s" %(self.fileName, self.numberOfPoints)
 
     #store the point from the STL file into arrays to work with
-    self.objectPoints = []
     for x in range(self.numberOfPoints):
       self.objectPoints.append(self.polydata.GetPoints().GetPoint(x))
     print "\n%s succesfully stored. Length of the storing array: %d" %(self.fileName, len(self.objectPoints))
+
+
 
 
   #determine the (new) number of points in the object
   def updateNumberOfPoints(self):
     self.numberOfPoints = len(self.objectPoints)
     print "\nNumber of Points in %s updated: %s" %(self.fileName, self.numberOfPoints)
+
+
 
 
   #store the individual axes-coordianes in arrays
@@ -68,6 +78,7 @@ class STL_Object:
     self.minY = min(self.yCoordinates)
     self.maxZ = max(self.zCoordinates)
     self.minZ = min(self.zCoordinates)
+    self.avgMaxDist = (self.maxX-self.minX+self.maxY-self.minY+self.maxZ-self.minZ)/3
     print "\nCoordinates of %s succesfully updated. Length of the arrays: %s, %s, %s \nThese are the min/max coordinates: X[%s,%s], Y[%s,%s], Z[%s,%s] " %(self.fileName, len(self.xCoordinates), len(self.yCoordinates), len(self.zCoordinates), self.minX,self.maxX,self.minY,self.maxY,self.minZ,self.maxZ)
     self.updateNumberOfPoints()
 
@@ -123,6 +134,9 @@ class STL_Object:
 
     #rewrite polydata
     self.polydata = self.triangles.GetOutput()
+
+
+    
     self.numberOfPoints = self.polydata.GetNumberOfPoints()
     self.objectPoints = []
     for x in range(self.numberOfPoints):
@@ -147,9 +161,6 @@ class STL_Object:
     """
 
 
-  #determine the surface area of the object
-  #def determineSurfaceArea(self):
-
   #vizualize the object 
   def visualize(self):
     self.mapper = vtk.vtkPolyDataMapper()
@@ -164,47 +175,32 @@ class STL_Object:
 #determine a value based on the comparison of 2 object
 #the method of comparison is developed on the basis of the Hamming distance
 
-def determineAxisHD(object1, axisNumber):
-  distList = []
+def determineHD(origObject, randObject):
   distListHD = []
-  addedDist = 0
   addedDistHD = 0
-  avgDist = 0
   avgDistHD = 0
-  stdDev = 0
   stdDevHD = 0
-  finalValues = []
-  for x in object1.objectPoints:
+  distHD = 0 
+  finalValueHD = 0
+  for x in randObject.objectPoints:
     pointDistList = []
-    for y in object1.objectPoints:
-      if 0<abs(x[axisNumber] - y[axisNumber])<0.001:
-        if vtkMath.Distance2BetweenPoints(x,y) > 0:
-          pointDistList.append(sqrt(vtkMath.Distance2BetweenPoints(x,y)))
-          distList.append(sqrt(vtkMath.Distance2BetweenPoints(x,y)))
-    distListHD.append(max(pointDistList))
+    for y in origObject.objectPoints:
+      pointDistList.append(sqrt(vtkMath.Distance2BetweenPoints(x,y)))
+  distListHD.append(min(pointDistList))
 
-  for a in range(len(distList)):
-    addedDist += distList[a]
-  avgDist = addedDist/len(distList)
-  finalValues.append(avgDist)
-
-  for b in range(len(distListHD)):
-    addedDistHD += distListHD[b]
+  for a in distListHD:
+    addedDistHD += a
   avgDistHD = addedDistHD/len(distListHD)
-  finalValues.append(avgDistHD)
 
-  for c in distListHD:
-    stdDev += (c - avgDist)**2
-  stdDev = sqrt(stdDev/len(distListHD))
-  finalValues.append(stdDev)
+  for b in distListHD:
+    stdDevHD += (b - avgDistHD)**2
+  stdDevHD = sqrt(stdDevHD/len(distListHD))
 
-  for d in distListHD:
-    stdDevHD += (d - avgDistHD)**2
-  stdDevHD = sqrt(stdDev/len(distListHD))
-  finalValues.append(stdDevHD)
-  print len(distList), len(distListHD),
+  distHD = max(distListHD)
+  finalValueHD = (1/(1+aplha*stdDevHD)) * (1/(1+beta*(avgDistHD/randObject.avgMaxDist))) * (1/(1+gamma*(distHD/randObject.avgMaxDist)))
 
-  return finalValues
+  print  len(distListHD), finalValueHD
+  return finalValueHD
 
 
 
@@ -212,64 +208,15 @@ def determineAxisHD(object1, axisNumber):
 
 
 
-
-
-
-
-objectone = STL_Object("initial_shape.stl")
-objectone.updateCoordinates()
-objectone.buildNegative()
-objectone.visualize()
-print determineAxisHD(objectone, 0)
-
-
-
-
-"""
-box = vtk.vtkCubeSource()
-
-box.SetBounds(getBoxValues("polydata1"))
-
-triangledBox = vtk.vtkTriangleFilter()
-triangledBox.SetInputConnection(box.GetOutputPort())
-triangledBox.Update()
-
-def getBoxValues(objectTobeValued):
-  if objectTobeValued == "polydata1":
-    xList = []
-    yList = []
-    zList = []
-    completeList =[]
-
-    for p in pointsobjectone:
-      xList.append(p[0])
-      yList.append(p[1])
-      zList.append(p[2])
-
-    completeList.append(min(xList) + 0.01)
-    completeList.append(max(xList) - 0.01)
-    completeList.append(min(yList) + 0.01)
-    completeList.append(max(yList) - 0.01) 
-    completeList.append(min(zList) + 0.001)
-    completeList.append(max(zList) - 0.001)
-  print completeList
-  return completeList
-
-
-
-
-
-
-
-booleanfilter = vtk.vtkBooleanOperationPolyDataFilter()
-booleanfilter.SetOperationToDifference()
-booleanfilter.SetInputConnection(1, reader1.GetOutputPort())
-booleanfilter.SetInputConnection(0, triangledBox.GetOutputPort())
-booleanfilter.SetTolerance(0.000000000000000001)
-"""
-
-
-
+generatedObject = STL_Object("initial_shape.stl")
+originalObject = STL_Object("final_shape.stl")
+originalObject.updateCoordinates()
+generatedObject.updateCoordinates()
+originalObject.buildNegative()
+generatedObject.buildNegative()
+originalObject.visualize()
+generatedObject.visualize()
+#print determineHD(objectone, 0)
 
 
 
@@ -289,14 +236,26 @@ volume2 = mass2.GetVolume()
 
 
 renderer = vtk.vtkRenderer()
-renderer.AddActor(objectone.actor)
+renderer.AddActor(originalObject.actor)
 renderer.SetBackground(1,1,1)
+
+renderer2 = vtk.vtkRenderer()
+renderer2.AddActor(generatedObject.actor)
+renderer2.SetBackground(1,1,1)
+
 
 window = vtk.vtkRenderWindow()
 window.AddRenderer(renderer)
 
+window2 = vtk.vtkRenderWindow()
+window2.AddRenderer(renderer2)
+
 interactor = vtk.vtkRenderWindowInteractor()
 interactor.SetRenderWindow(window)
+
+interactor2 = vtk.vtkRenderWindowInteractor()
+interactor2.SetRenderWindow(window2)
+
 
 axes = vtk.vtkAxesActor()
 widget = vtk.vtkOrientationMarkerWidget()
@@ -305,14 +264,15 @@ widget.SetInteractor(interactor)
 widget.SetEnabled(1)
 widget.InteractiveOn()
 
+widget2 = vtk.vtkOrientationMarkerWidget()
+widget2.SetOrientationMarker(axes)
+widget2.SetInteractor(interactor2)
+widget2.SetEnabled(1)
+widget2.InteractiveOn()
+
 window.Render()
+window2.Render()
 interactor.Initialize()
 interactor.Start() 
-
-
-"""     
-      if (self.minZ - 0.0001) < i[2] < (self.minZ + 0.0001):
-        pass
-      elif (self.maxZ - 0.0001) < i[2] < (self.maxZ + 0.0001):
-        pass
-"""
+interactor2.Initialize()
+interactor2.Start() 
