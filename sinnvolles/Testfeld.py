@@ -52,13 +52,10 @@ class STL_Object:
 
 
 
-
   #determine the (new) number of points in the object
   def updateNumberOfPoints(self):
     self.numberOfPoints = len(self.objectPoints)
     print "\nNumber of Points in %s updated: %s" %(self.fileName, self.numberOfPoints)
-
-
 
 
   #store the individual axes-coordianes in arrays
@@ -78,7 +75,6 @@ class STL_Object:
     self.minY = min(self.yCoordinates)
     self.maxZ = max(self.zCoordinates)
     self.minZ = min(self.zCoordinates)
-    self.avgMaxDist = (self.maxX-self.minX+self.maxY-self.minY+self.maxZ-self.minZ)/3
     print "\nCoordinates of %s succesfully updated. Length of the arrays: %s, %s, %s \nThese are the min/max coordinates: X[%s,%s], Y[%s,%s], Z[%s,%s] " %(self.fileName, len(self.xCoordinates), len(self.yCoordinates), len(self.zCoordinates), self.minX,self.maxX,self.minY,self.maxY,self.minZ,self.maxZ)
     self.updateNumberOfPoints()
 
@@ -134,9 +130,6 @@ class STL_Object:
 
     #rewrite polydata
     self.polydata = self.triangles.GetOutput()
-
-
-    
     self.numberOfPoints = self.polydata.GetNumberOfPoints()
     self.objectPoints = []
     for x in range(self.numberOfPoints):
@@ -174,7 +167,6 @@ class STL_Object:
 
 #determine a value based on the comparison of 2 object
 #the method of comparison is developed on the basis of the Hamming distance
-
 def determineHD(origObject, randObject):
   distListHD = []
   addedDistHD = 0
@@ -186,7 +178,6 @@ def determineHD(origObject, randObject):
     pointDistList = []
     for y in origObject.objectPoints:
       pointDistList.append(sqrt(vtkMath.Distance2BetweenPoints(x,y)))
-  distListHD.append(min(pointDistList))
 
   for a in distListHD:
     addedDistHD += a
@@ -216,7 +207,6 @@ originalObject.buildNegative()
 generatedObject.buildNegative()
 originalObject.visualize()
 generatedObject.visualize()
-#print determineHD(objectone, 0)
 
 
 
@@ -243,7 +233,6 @@ renderer2 = vtk.vtkRenderer()
 renderer2.AddActor(generatedObject.actor)
 renderer2.SetBackground(1,1,1)
 
-
 window = vtk.vtkRenderWindow()
 window.AddRenderer(renderer)
 
@@ -256,8 +245,8 @@ interactor.SetRenderWindow(window)
 interactor2 = vtk.vtkRenderWindowInteractor()
 interactor2.SetRenderWindow(window2)
 
-
 axes = vtk.vtkAxesActor()
+
 widget = vtk.vtkOrientationMarkerWidget()
 widget.SetOrientationMarker(axes)
 widget.SetInteractor(interactor)
@@ -276,3 +265,7 @@ interactor.Initialize()
 interactor.Start() 
 interactor2.Initialize()
 interactor2.Start() 
+
+
+
+
