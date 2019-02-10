@@ -5,18 +5,20 @@ from math import sqrt, atan2
 final_shape = "final_shape.stl"
 initial_shape = "initial_shape.stl"
 
-aplha   = 1        # standard deviation influence on the HD value
-beta    = 1        # average HD distance influence on the HD value
-gamma   = 1        # overall HD distance influence on the HD value
-delta   = 5        # (delta - 1) Planes are generated per axis
-epsilon = 0.001    # tolerance value for the planes
-zeta    = 1        # influence of the average distance in the planes on the individual plane value
-eta     = 1        # influence of the average angle in the planes on the individual plane value
-theta   = 1        # influence of the standard deviation of the distances on the ind. plane value
-iota    = 1        # influence of the standard deviation of the angles on the ind. plane value
-
-
-
+aplha   = 1         # standard deviation influence on the HD value
+beta    = 1         # average HD distance influence on the HD value
+gamma   = 1         # overall HD distance influence on the HD value
+delta   = 5         # (delta - 1) Planes are generated per axis
+epsilon = 0.001     # tolerance value for the planes
+zeta    = 1         # influence of the average distance in the planes on the individual plane value
+eta     = 1         # influence of the average angle in the planes on the individual plane value
+theta   = 1         # influence of the standard deviation of the distances on the ind. plane value
+iota    = 1         # influence of the standard deviation of the angles on the ind. plane value
+kappa   = 1         # influence of the difference of the volumes on the boundary value
+my      = 1         # influence of the difference of the surface areas on the boundary value
+sigma   = 1         # influence of on the final Value
+rho     = 1         # influence of on the final Value
+omega   = 1         # influence of on the final Value
 
 # define the class which creates objects store the data of the STL files
 class STL_Object:
@@ -45,6 +47,10 @@ class STL_Object:
     self.avgMaxDist = 0
     self.vol = 0
     self.surfA = 0
+    self.valueHD = 0
+    self.valuePlane = 0 
+    self.valueBoundary = 0
+    self.similartiy = 0
 
     # reads the Objekt from the stl file
     self.reader = vtk.vtkSTLReader()
@@ -180,7 +186,7 @@ class STL_Object:
 
 # determine a value based on the comparison of 2 object
 # the method of comparison is developed on the basis of the Hamming distance
-def determineHD(origObject, genObject):
+def getHD(origObject, genObject):
   distListHD = []
   avgDistHD = 0
   stdDevHD = 0
@@ -205,12 +211,12 @@ def determineHD(origObject, genObject):
   finalValueHD = (1/(1+aplha*stdDevHD)) * (1/(1+beta*(avgDistHD/randObject.avgMaxDist))) * (1/(1+gamma*(distHD/randObject.avgMaxDist)))
   
   print  len(distListHD), finalValueHD
-  return finalValueHD
+  generatedObject.valueHD = finalValueHD
 
 
 
 # get Values from the cutting planes in every axes direction
-def determinePlaneValues(oObject, gObject):
+def getPlaneValues(oObject, gObject):
   axisValue = 0
   xPlaneValues = []
   xValue = 0
@@ -321,12 +327,6 @@ def determinePlaneValues(oObject, gObject):
     axisValueX = (1/(1+(zeta*(abs((xPlaneAvgPointDistO - xPlaneAvgPointDistG)/xPlaneAvgPointDistO)))))*(1/(1+(eta*(abs((xPlaneAvgAngleO - xPlaneAvgAngleG)/xPlaneAvgAngleO)))))*(1/(1+(theta*(abs(xPlaneStdDevDistO - xPlaneStdDevDistG)/xPlaneStdDevDistO))))*(1/(1+(iota*(abs(xPlaneStdDevAngleO - xPlaneStdDevAngleG)/xPlaneStdDevAngleO))))
     xPlaneValues.append(axisValueX)
 
-  for listX in xPlaneValues:
-    xValue += listX
-  xValue = xValue/len(xPlaneValues)
-
-
-
 
   # create Y Planes
   for y in range(delta - 1):
@@ -428,16 +428,6 @@ def determinePlaneValues(oObject, gObject):
     # get axis value and store it
     axisValueY = (1/(1+(zeta*(abs((yPlaneAvgPointDistO - yPlaneAvgPointDistG)/yPlaneAvgPointDistO)))))*(1/(1+(eta*(abs((yPlaneAvgAngleO - yPlaneAvgAngleG)/yPlaneAvgAngleO)))))*(1/(1+(theta*(abs(yPlaneStdDevDistO - yPlaneStdDevDistG)/yPlaneStdDevDistO))))*(1/(1+(iota*(abs(yPlaneStdDevAngleO - yPlaneStdDevAngleG)/yPlaneStdDevAngleO))))
     yPlaneValues.append(axisValueY)
-
-  for listY in yPlaneValues:
-    yValue += listY
-  yValue = yValue/len(yPlaneValues)
-
-  finalValuePlane = (xValue + yValue + zValue)/3
-  print finalValuePlane
-  return finalValuePlane
-
-
 
 
   # create Z Planes
@@ -541,16 +531,49 @@ def determinePlaneValues(oObject, gObject):
     axisValueZ = (1/(1+(zeta*(abs((zPlaneAvgPointDistO - zPlaneAvgPointDistG)/zPlaneAvgPointDistO)))))*(1/(1+(eta*(abs((zPlaneAvgAngleO - zPlaneAvgAngleG)/zPlaneAvgAngleO)))))*(1/(1+(theta*(abs(zPlaneStdDevDistO - zPlaneStdDevDistG)/zPlaneStdDevDistO))))*(1/(1+(iota*(abs(zPlaneStdDevAngleO - zPlaneStdDevAngleG)/zPlaneStdDevAngleO))))
     zPlaneValues.append(axisValueZ)
 
+
+  for listX in xPlaneValues:
+    xValue += listX
+  xValue = xValue/len(xPlaneValues)
+
+  for listY in yPlaneValues:
+    yValue += listY
+  yValue = yValue/len(yPlaneValues)
+
   for listZ in zPlaneValues:
     zValue += listZ
   zValue = zValue/len(zPlaneValues)
 
+  finalValuePlane = (xValue + yValue + zValue)/3
+  print finalValuePlane
+  generatedObject.valuePlane = finalValuePlane
+
+#get a value by comparing surface area as well as volume
+def getBoundaryValue(orObject, geObject):
+  surfaceValue = 0
+  volumeValue = 0
+  combinedValue = 0
+  orObject.getPropertyInfo()
+  geObject.getPropertyInfo()
+  volumeValue = 1/(1+(kappa*abs((orObject.vol - geObject.vol)/orObject.vol)))
+  surfaceValue = 1/(1+(my*abs((orObject.surfA - geObject.surfA)/orObject.surfA)))
+  combinedValue = surfaceValue * volumeValue
+  geObject.valueBoundary = combinedValue
 
 
+def getSimilarityValue(original, generated):
+  simValue = 0
+  getBoundaryValue(original, generated)
+  getHD(original, generated)
+  getPlaneValues(original, generated)
+  simValue = ((sigma * generated.valueBoundary) + (rho * generated.valuePlane) + (omega * generated.valueHD)/(sigma + rho + omega))
+  generated.similartiy = simValue
 
 
-
-
+def writeBack():
+  file1 = open("SimilarityValue.txt","w")
+  file1.write(generatedObject.similartiy)
+  file1.close()
 
 
 
@@ -562,7 +585,7 @@ originalObject.buildNegative()
 generatedObject.buildNegative()
 originalObject.visualize()
 generatedObject.visualize()
-#print determineHD(originalObject, generatedObject)
+
 
 
 
