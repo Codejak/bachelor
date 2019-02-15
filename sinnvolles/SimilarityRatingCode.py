@@ -8,7 +8,7 @@ initial_shape = "initial_shape.stl"
 aplha   = 1         # standard deviation influence on the HD value
 beta    = 1         # average HD distance influence on the HD value
 gamma   = 1         # overall HD distance influence on the HD value
-delta   = 5         # (delta - 1) Planes are generated per axis
+delta   = 3         # (delta - 1) Planes are generated per axis
 epsilon = 0.001     # tolerance value for the planes
 zeta    = 1         # influence of the average distance in the planes on the individual plane value
 eta     = 1         # influence of the average angle in the planes on the individual plane value
@@ -19,17 +19,16 @@ my      = 1         # influence of the difference of the surface areas on the bo
 sigma   = 1         # influence of on the final Value
 rho     = 1         # influence of on the final Value
 omega   = 1         # influence of on the final Value
+tolerancevalue = 0.0001
+tolerancevalue2 = 0.00000001
 
 # define the class which creates objects store the data of the STL files
 class STL_Object:
-  numberOfSTLObjects = 0
   # initiation of the objects
   def __init__(self, fileName):
 
-    # increasing the objectcounter
-    STL_Object.numberOfSTLObjects += 1
-
     # defining the attributes
+    self.booleanfilter = vtk.vtkBooleanOperationPolyDataFilter()
     self.fileName = fileName
     self.objectPoints = []
     self.xCoordinates = []
@@ -50,7 +49,7 @@ class STL_Object:
     self.valueHD = 0
     self.valuePlane = 0 
     self.valueBoundary = 0
-    self.similartiy = 0
+    self.similarity = 0
 
     # reads the Objekt from the stl file
     self.reader = vtk.vtkSTLReader()
@@ -61,7 +60,7 @@ class STL_Object:
 
     # determine the number of Points
     self.numberOfPoints = self.polydata.GetNumberOfPoints()
-    print "\nTrying to store -%s-! Point Number:%s" %(self.fileName, self.numberOfPoints)
+    #print "\nTrying to store -%s-! Point Number:%s" %(self.fileName, self.numberOfPoints)
 
     # store the point from the STL file into arrays to work with
     self.objectPoints = []
@@ -99,7 +98,7 @@ class STL_Object:
     self.yDist = self.maxY - self.minY
     self.zDist = self.maxZ - self.minZ
     self.avgMaxDist = (self.xDist+self.yDist+self.zDist)/3
-    print "\nCoordinates of %s succesfully updated. Length of the arrays: %s, %s, %s \nThese are the min/max coordinates: X[%s,%s], Y[%s,%s], Z[%s,%s] " %(self.fileName, len(self.xCoordinates), len(self.yCoordinates), len(self.zCoordinates), self.minX,self.maxX,self.minY,self.maxY,self.minZ,self.maxZ)
+    #print "\nCoordinates of %s succesfully updated. Length of the arrays: %s, %s, %s \nThese are the min/max coordinates: X[%s,%s], Y[%s,%s], Z[%s,%s] " %(self.fileName, len(self.xCoordinates), len(self.yCoordinates), len(self.zCoordinates), self.minX,self.maxX,self.minY,self.maxY,self.minZ,self.maxZ)
     self.updateNumberOfPoints()
 
   """
@@ -125,12 +124,12 @@ class STL_Object:
     # create the box to build the negative with
     self.box = vtk.vtkCubeSource()
     completeList = []
-    completeList.append(self.minX + 0.0000001)
-    completeList.append(self.maxX - 0.0000001)
-    completeList.append(self.minY + 0.0000001)
-    completeList.append(self.maxY - 0.0000001) 
-    completeList.append(self.minZ + 0.0000001)
-    completeList.append(self.maxZ - 0.0000001)
+    completeList.append(self.minX + tolerancevalue)
+    completeList.append(self.maxX - tolerancevalue)
+    completeList.append(self.minY + tolerancevalue)
+    completeList.append(self.maxY - tolerancevalue) 
+    completeList.append(self.minZ + tolerancevalue)
+    completeList.append(self.maxZ - tolerancevalue)
     self.box.SetBounds(completeList)
 
     self.triangledBox = vtk.vtkTriangleFilter()
@@ -140,20 +139,29 @@ class STL_Object:
     # get the difference between the box and the file
     self.booleanfilter = vtk.vtkBooleanOperationPolyDataFilter()
     self.booleanfilter.SetOperationToDifference()
-    self.booleanfilter.SetTolerance(0.000000000001)
+    self.booleanfilter.SetTolerance(tolerancevalue2)
     self.booleanfilter.SetInputConnection(1, self.reader.GetOutputPort())
     self.booleanfilter.SetInputConnection(0, self.triangledBox.GetOutputPort())
+
+    self.triangles = vtk.vtkTriangleFilter()
+    self.triangles.SetInputConnection(self.booleanfilter.GetOutputPort())
+    self.triangles.Update()
 
     self.clean = vtk.vtkCleanPolyData()
     self.clean.SetInputConnection(self.booleanfilter.GetOutputPort())
     self.clean.SetTolerance(0.00001)
-
-    self.triangles = vtk.vtkTriangleFilter()
-    self.triangles.SetInputConnection(self.clean.GetOutputPort())
-    self.triangles.Update()
-
+    self.clean.Update()
+    
+    
+    # determine the volume and surface area of the object
+    self.massP = vtk.vtkMassProperties()
+    self.massP.SetInputConnection(self.booleanfilter.GetOutputPort())
+    self.massP.Update()
+    self.vol = self.massP.GetVolume()
+    self.surfA = self.massP.GetSurfaceArea()
+    
     # rewrite polydata
-    self.polydata = self.triangles.GetOutput()
+    self.polydata = self.clean.GetOutput()
     self.numberOfPoints = self.polydata.GetNumberOfPoints()
     self.objectPoints = []
     for x in range(self.numberOfPoints):
@@ -161,43 +169,30 @@ class STL_Object:
     self.updateCoordinates()
 
 
-
-  # determine the surface area of the object
-  def getPropertyInfo(self):
-    self.massP = vtk.vtkMassProperties()
-    self.massP.SetInputData(polydata)
-    self.massP.Update()
-    self.vol = self.massP.GetVolume()
-    self.surfA = self.massP.GetSurfaceArea()
-
-
   # vizualize the object 
   def visualize(self):
-
     self.mapper = vtk.vtkPolyDataMapper()
-    self.mapper.SetInputData(self.polydata)
-    #self.mapper.SetInputConnection(self.booleanfilter.GetOutputPort())
+    #self.mapper.SetInputData(self.polydata)
+    self.mapper.SetInputConnection(self.booleanfilter.GetOutputPort())
     self.mapper.ScalarVisibilityOff()
     self.actor = vtk.vtkActor()
     self.actor.SetMapper(self.mapper)
     self.actor.GetProperty().EdgeVisibilityOn()
 
 
-
 # determine a value based on the comparison of 2 object
 # the method of comparison is developed on the basis of the Hamming distance
-def getHD(origObject, genObject):
+def getHD():
   distListHD = []
   avgDistHD = 0
   stdDevHD = 0
   distHD = 0 
   finalValueHD = 0
-  for x in genObject.objectPoints:
+  for x in generatedObject.objectPoints:
     pointDistList = []
-    for y in origObject.objectPoints:
+    for y in originalObject.objectPoints:
       pointDistList.append(sqrt(vtkMath.Distance2BetweenPoints(x,y)))
     distListHD.append(min(pointDistList))
-  print distListHD
 
   for a in distListHD:
     avgDistHD += a
@@ -208,15 +203,15 @@ def getHD(origObject, genObject):
   stdDevHD = sqrt(stdDevHD/len(distListHD))
 
   distHD = max(distListHD)
-  finalValueHD = (1/(1+aplha*stdDevHD)) * (1/(1+beta*(avgDistHD/randObject.avgMaxDist))) * (1/(1+gamma*(distHD/randObject.avgMaxDist)))
+  finalValueHD = (1/(1+aplha*stdDevHD)) * (1/(1+beta*(avgDistHD/generatedObject.avgMaxDist))) * (1/(1+gamma*(distHD/generatedObject.avgMaxDist)))
   
-  print  len(distListHD), finalValueHD
+  print  "finalValueHD is: %s" %(finalValueHD)
   generatedObject.valueHD = finalValueHD
 
 
 
 # get Values from the cutting planes in every axes direction
-def getPlaneValues(oObject, gObject):
+def getPlaneValues():
   axisValue = 0
   xPlaneValues = []
   xValue = 0
@@ -246,11 +241,11 @@ def getPlaneValues(oObject, gObject):
     xPlaneStdDevAngleG = 0
 
     # store Planes
-    for pointA in oObject.objectPoints:
-      if pointA[0] > (((x+1)/delta)*oObject.distX - epsilon) or pointA[0] < (((x+1)/delta)*oObject.distX + epsilon):
+    for pointA in originalObject.objectPoints:
+      if pointA[0] > (((x+1)/delta)*originalObject.xDist - epsilon) or pointA[0] < (((x+1)/delta)*originalObject.xDist + epsilon):
         xPlanePointsO.append(pointA)
-    for pointB in gObject.objectPoints:
-      if pointB[0] > (((x+1)/delta)*oObject.distX - epsilon) or pointB[0] < (((x+1)/delta)*oObject.distX + epsilon):
+    for pointB in generatedObject.objectPoints:
+      if pointB[0] > (((x+1)/delta)*originalObject.xDist - epsilon) or pointB[0] < (((x+1)/delta)*originalObject.xDist + epsilon):
         xPlanePointsG.append(pointB)
 
     # find the distance from the Points to the origin
@@ -365,11 +360,11 @@ def getPlaneValues(oObject, gObject):
     yPlaneStdDevAngleG = 0
 
     # store Planes
-    for pointM in oObject.objectPoints:
-      if pointM[0] > (((y+1)/delta)*oObject.distY - epsilon) or pointM[0] < (((y+1)/delta)*oObject.distY + epsilon):
+    for pointM in originalObject.objectPoints:
+      if pointM[0] > (((y+1)/delta)*originalObject.yDist - epsilon) or pointM[0] < (((y+1)/delta)*originalObject.yDist + epsilon):
         yPlanePointsO.append(pointM)
-    for pointN in gObject.objectPoints:
-      if pointN[0] > (((y+1)/delta)*oObject.distY - epsilon) or pointN[0] < (((y+1)/delta)*oObject.distY + epsilon):
+    for pointN in generatedObject.objectPoints:
+      if pointN[0] > (((y+1)/delta)*originalObject.yDist - epsilon) or pointN[0] < (((y+1)/delta)*originalObject.yDist + epsilon):
         yPlanePointsG.append(pointN)
 
     # find the distance from the Points to the origin
@@ -427,7 +422,7 @@ def getPlaneValues(oObject, gObject):
             if vtkMath.Distance2BetweenPoints(pointW,pointX) == 0:
               pass
             else:
-              yPlanePointAnglesG.append(atan2(pointX[2]-pointW[2],pointX[0]-pointX[0]))
+              yPlanePointAnglesG.append(atan2(pointX[2]-pointW[2],pointX[0]-pointW[0]))
 
     if len(yPlanePointAnglesO) > 0 and len(yPlanePointAnglesG) > 0:
       # get the average angle
@@ -484,11 +479,11 @@ def getPlaneValues(oObject, gObject):
     zPlaneStdDevAngleG = 0
 
     # store Planes
-    for pointY in oObject.objectPoints:
-      if pointY[0] > (((z+1)/delta)*oObject.distZ - epsilon) or pointY[0] < (((z+1)/delta)*oObject.distZ + epsilon):
+    for pointY in originalObject.objectPoints:
+      if pointY[0] > (((z+1)/delta)*originalObject.zDist - epsilon) or pointY[0] < (((z+1)/delta)*originalObject.zDist + epsilon):
         zPlanePointsO.append(pointY)
-    for pointZ in gObject.objectPoints:
-      if pointZ[0] > (((z+1)/delta)*oObject.distZ - epsilon) or pointZ[0] < (((z+1)/delta)*oObject.distZ + epsilon):
+    for pointZ in generatedObject.objectPoints:
+      if pointZ[0] > (((z+1)/delta)*originalObject.zDist - epsilon) or pointZ[0] < (((z+1)/delta)*originalObject.zDist + epsilon):
         zPlanePointsG.append(pointZ)
 
     # find the distance from the Points to the origin
@@ -560,7 +555,7 @@ def getPlaneValues(oObject, gObject):
       # get the standard deviation of the angles
       for m in zPlanePointAnglesO:
         zPlaneStdDevAngleO += (m - zPlaneAvgPointDistO)**2
-      zPlaneStdDevAngleO = sqrt(zPlaneStdDevAngleO/len(zPlanePointAngles O))
+      zPlaneStdDevAngleO = sqrt(zPlaneStdDevAngleO/len(zPlanePointAnglesO))
       for n in zPlanePointAnglesG:
         zPlaneStdDevAngleG += (n - zPlaneAvgPointDistG)**2
       zPlaneStdDevAngleG = sqrt(zPlaneStdDevAngleG/len(zPlanePointAnglesG))
@@ -623,48 +618,56 @@ def getPlaneValues(oObject, gObject):
   print "final plane value: %s" %(finalValuePlane)
 
 #get a value by comparing surface area as well as volume
-def getBoundaryValue(orObject, geObject):
+def getBoundaryValue():
   surfaceValue = 0
   volumeValue = 0
   combinedValue = 0
-  orObject.getPropertyInfo()
-  geObject.getPropertyInfo()
-  if orObject.vol > 0 and geObject.vol > 0:
-    if orObject.surfA > 0 and geObject.surfA > 0:
-      volumeValue = 1/(1+(kappa*abs((orObject.vol - geObject.vol)/orObject.vol)))
-      surfaceValue = 1/(1+(my*abs((orObject.surfA - geObject.surfA)/orObject.surfA)))
+  #originalObject.getPropertyInfo()
+  #generatedObject.getPropertyInfo()
+  print "orignal volume: %s" %(originalObject.vol)
+  print "generated volume: %s" %(generatedObject.vol)
+  if originalObject.vol > 0 and generatedObject.vol > 0:
+    if originalObject.surfA > 0 and generatedObject.surfA > 0:
+      volumeValue = 1/(1+(kappa*abs((originalObject.vol - generatedObject.vol)/originalObject.vol)))
+      print "volume value is: %s" %(volumeValue)
+      surfaceValue = 1/(1+(my*abs((originalObject.surfA - generatedObject.surfA)/originalObject.surfA)))
+      print "surface value is: %s" %(surfaceValue)
     else:
       print "surface Areas are empty"
   else:
     print "volumes are empty"
   combinedValue = surfaceValue * volumeValue
-  geObject.valueBoundary = combinedValue
+  generatedObject.valueBoundary = combinedValue
+  print "Boundary value is: %s" %(combinedValue)
 
 
-def getSimilarityValue(original, generated):
+def getSimilarityValue():
   simValue = 0
-  getBoundaryValue(original, generated)
-  getHD(original, generated)
-  getPlaneValues(original, generated)
-  simValue = ((sigma * generated.valueBoundary) + (rho * generated.valuePlane) + (omega * generated.valueHD)/(sigma + rho + omega))
-  print simValue
-  generated.similartiy = simValue
+  getBoundaryValue()
+  getHD()
+  getPlaneValues()
+  simValue = (((sigma * generatedObject.valueBoundary) + (rho * generatedObject.valuePlane) + (omega * generatedObject.valueHD))/(sigma + rho + omega))
+  print "similarity is: %s" %(simValue)
+  generatedObject.similarity = simValue
 
 
 def writeBack():
   file1 = open("SimilarityValue.txt","w")
-  file1.write(generatedObject.similartiy)
+  file1.write("%s"%generatedObject.similarity)
   file1.close()
 
 
 
+originalObject = STL_Object("initial_shape.stl")
 generatedObject = STL_Object("initial_shape.stl")
-originalObject = STL_Object("final_shape.stl")
 originalObject.updateCoordinates()
 generatedObject.updateCoordinates()
+print "updated"
 originalObject.buildNegative()
+print "original reversed"
 generatedObject.buildNegative()
-getSimilarityValue(originalObject, generatedObject)
+print "negatives built"
+getSimilarityValue()
 writeBack()
 originalObject.visualize()
 generatedObject.visualize()
