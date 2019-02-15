@@ -254,78 +254,95 @@ def getPlaneValues(oObject, gObject):
         xPlanePointsG.append(pointB)
 
     # find the distance from the Points to the origin
-    for pointC in xPlanePointsO:
-      xPlaneOriginDistO.append(sqrt(pointC[1]**2+pointC[2]**2))
-    for pointD in xPlanePointsG:
-      xPlaneOriginDistG.append(sqrt(pointD[1]**2+pointD[2]**2))
+    if len(xPlanePointsO) > 1 and len(xPlanePointsG) > 1:
+      for pointC in xPlanePointsO:
+        xPlaneOriginDistO.append(sqrt(pointC[1]**2+pointC[2]**2))
+      for pointD in xPlanePointsG:
+        xPlaneOriginDistG.append(sqrt(pointD[1]**2+pointD[2]**2))
 
     # store the Distances to the farest point from the origin
-    for pointE in xPlanePointsO:
-      if sqrt(pointE[1]**2+pointE[2]**2) == max(xPlaneOriginDistO):
-        for pointF in xPlanePointsO:
-          if vtkMath.Distance2BetweenPoints(pointE,pointF) == 0:
-            pass
+    if len(xPlaneOriginDistO) > 1 and len(xPlaneOriginDistG) > 1:
+      for pointE in xPlanePointsO:
+        if sqrt(pointE[1]**2+pointE[2]**2) == max(xPlaneOriginDistO):
+          for pointF in xPlanePointsO:
+            if vtkMath.Distance2BetweenPoints(pointE,pointF) == 0:
+              pass
+            else:
+              xPlanePointDistO.append(sqrt(vtkMath.Distance2BetweenPoints(pointE,pointF)))
+      for pointG in xPlanePointsG:
+        if sqrt(pointG[1]**2+pointG[2]**2) == max(xPlaneOriginDistG):
+          for pointH in xPlanePointsG:
+            if vtkMath.Distance2BetweenPoints(pointG,pointH) == 0:
+              pass
+            else:
+              xPlanePointDistG.append(sqrt(vtkMath.Distance2BetweenPoints(pointG,pointH)))
+
+    if len(xPlanePointDistO) > 0 and len(xPlanePointDistG) > 0:
+      # get average Point distances
+      for dist1 in xPlanePointDistO:
+        xPlaneAvgPointDistO += dist1
+      xPlaneAvgPointDistO = xPlaneAvgPointDistO/len(xPlanePointDistO)
+      for dist2 in xPlanePointDistG:
+        xPlaneAvgPointDistG += dist2
+      xPlaneAvgPointDistG = xPlaneAvgPointDistG/len(xPlanePointDistG)
+
+      # get the standard deviation of these distances
+      for c in xPlanePointDistO:
+        xPlaneStdDevDistO += (c - xPlaneAvgPointDistO)**2
+      xPlaneStdDevDistO = sqrt(xPlaneStdDevDistO/len(xPlanePointDistO))
+      for d in xPlanePointDistG:
+        xPlaneStdDevDistG += (d - xPlaneAvgPointDistG)**2
+      xPlaneStdDevDistG = sqrt(xPlaneStdDevDistG/len(xPlanePointDistG))
+
+      # get angles between points
+      for pointI in xPlanePointsO:
+        if sqrt(pointI[1]**2+pointI[2]**2) == max(xPlaneOriginDistO):
+          for pointJ in xPlanePointsO:
+            if vtkMath.Distance2BetweenPoints(pointI,pointJ) == 0:
+              pass
+            else:
+              xPlanePointAnglesO.append(atan2(pointJ[2]-pointI[2],pointJ[1]-pointI[1]))
+      for pointK in xPlanePointsG:
+        if sqrt(pointK[1]**2+pointK[2]**2) == max(xPlaneOriginDistG):
+          for pointL in xPlanePointsG:
+            if vtkMath.Distance2BetweenPoints(pointK,pointL) == 0:
+              pass
+            else:
+              xPlanePointAnglesG.append(atan2(pointL[2]-pointK[2],pointL[1]-pointK[1]))
+
+    if len(xPlanePointAnglesO) > 0 and len(xPlanePointAnglesG) > 0:
+      # get the average angle
+      for dist3 in xPlanePointAnglesO:
+        xPlaneAvgAngleO += dist3
+      xPlaneAvgAngleO = xPlaneAvgAngleO/len(xPlanePointAnglesO)
+      for dist4 in xPlanePointAnglesG:
+        xPlaneAvgAngleG += dist4
+      xPlaneAvgAngleG = xPlaneAvgAngleG/len(xPlanePointAnglesG)
+
+      # get the standard deviation of the angles
+      for e in xPlanePointAnglesO:
+        xPlaneStdDevAngleO += (e - xPlaneAvgPointDistO)**2
+      xPlaneStdDevAngleO = sqrt(xPlaneStdDevAngleO/len(xPlanePointAnglesO))
+      for f in xPlanePointAnglesG:
+        xPlaneStdDevAngleG += (f - xPlaneAvgPointDistG)**2
+      xPlaneStdDevAngleG = sqrt(xPlaneStdDevAngleG/len(xPlanePointAnglesG))
+
+    if xPlaneAvgPointDistO != 0 and xPlaneAvgPointDistG != 0:
+      if xPlaneAvgAngleO != 0 and xPlaneAvgAngleG != 0:
+        if xPlaneStdDevDistO != 0 and xPlaneStdDevDistG != 0:
+          if xPlaneStdDevAngleO != 0 and xPlaneStdDevAngleG != 0:
+            # get axis value and store it
+            axisValueX = (1/(1+(zeta*(abs((xPlaneAvgPointDistO - xPlaneAvgPointDistG)/xPlaneAvgPointDistO)))))*(1/(1+(eta*(abs((xPlaneAvgAngleO - xPlaneAvgAngleG)/xPlaneAvgAngleO)))))*(1/(1+(theta*(abs(xPlaneStdDevDistO - xPlaneStdDevDistG)/xPlaneStdDevDistO))))*(1/(1+(iota*(abs(xPlaneStdDevAngleO - xPlaneStdDevAngleG)/xPlaneStdDevAngleO))))
+            xPlaneValues.append(axisValueX)
+            print "Axis Value for x Plane nr. %s is: %s" %(x,axisValueX)
           else:
-            xPlanePointDistO.append(sqrt(vtkMath.Distance2BetweenPoints(pointE,pointF)))
-    for pointG in xPlanePointsG:
-      if sqrt(pointG[1]**2+pointG[2]**2) == max(xPlaneOriginDistG):
-        for pointH in xPlanePointsG:
-          if vtkMath.Distance2BetweenPoints(pointG,pointH) == 0:
-            pass
-          else:
-            xPlanePointDistG.append(sqrt(vtkMath.Distance2BetweenPoints(pointG,pointH)))
-
-    # get average Point distances
-    for dist1 in xPlanePointsDistO:
-      xPlaneAvgPointDistO += dist1
-    xPlaneAvgPointDistO = xPlaneAvgPointDistO/len(xPlanePointsDistO)
-    for dist2 in xPlanePointsDistG:
-      xPlaneAvgPointDistG += dist2
-    xPlaneAvgPointDistG = xPlaneAvgPointDistG/len(xPlanePointsDistG)
-
-    # get the standard deviation of these distances
-    for c in xPlanePointsDistO:
-      xPlaneStdDevDistO += (c - xPlaneAvgPointDistO)**2
-    xPlaneStdDevDistO = sqrt(xPlaneStdDevDistO/len(xPlanePointsDistO))
-    for d in xPlanePointsDistG:
-      xPlaneStdDevDistG += (d - xPlaneAvgPointDistG)**2
-    xPlaneStdDevDistG = sqrt(xPlaneStdDevDistG/len(xPlanePointsDistG))
-
-    # get angles between points
-    for pointI in xPlanePointsO:
-      if sqrt(pointI[1]**2+pointI[2]**2) == max(xPlaneOriginDistO):
-        for pointJ in xPlanePointsO:
-          if vtkMath.Distance2BetweenPoints(pointI,pointJ) == 0:
-            pass
-          else:
-            xPlanePointAnglesO.append(atan2(pointJ[2]-pointI[2],pointJ[1]-pointI[1]))
-    for pointK in xPlanePointsG:
-      if sqrt(pointK[1]**2+pointK[2]**2) == max(xPlaneOriginDistG):
-        for pointL in xPlanePointsG:
-          if vtkMath.Distance2BetweenPoints(pointK,pointL) == 0:
-            pass
-          else:
-            xPlanePointAnglesG.append(atan2(pointL[2]-pointK[2],pointL[1]-pointK[1]))
-
-    # get the average angle
-    for dist3 in xPlanePointAnglesO:
-      xPlaneAvgAngleO += dist3
-    xPlaneAvgAngleO = xPlaneAvgAngleO/len(xPlanePointAnglesO)
-    for dist4 in xPlanePointAnglesG:
-      xPlaneAvgAngleG += dist4
-    xPlaneAvgAngleG = xPlaneAvgAngleG/len(xPlanePointAnglesG)
-
-    # get the standard deviation of the angles
-    for e in xPlanePointAnglesO:
-      xPlaneStdDevAngleO += (e - xPlaneAvgPointDistO)**2
-    xPlaneStdDevAngleO = sqrt(xPlaneStdDevAngleO/len(xPlanePointAnglesO))
-    for f in xPlanePointAnglesG:
-      xPlaneStdDevAngleG += (f - xPlaneAvgPointDistG)**2
-    xPlaneStdDevAngleG = sqrt(xPlaneStdDevAngleG/len(xPlanePointAnglesG))
-
-    # get axis value and store it
-    axisValueX = (1/(1+(zeta*(abs((xPlaneAvgPointDistO - xPlaneAvgPointDistG)/xPlaneAvgPointDistO)))))*(1/(1+(eta*(abs((xPlaneAvgAngleO - xPlaneAvgAngleG)/xPlaneAvgAngleO)))))*(1/(1+(theta*(abs(xPlaneStdDevDistO - xPlaneStdDevDistG)/xPlaneStdDevDistO))))*(1/(1+(iota*(abs(xPlaneStdDevAngleO - xPlaneStdDevAngleG)/xPlaneStdDevAngleO))))
-    xPlaneValues.append(axisValueX)
+            print "no angle std deviation in this x-Pane"
+        else:
+          print "no distance std deviation in this x-Plane"
+      else:
+        print "not enough angles in this x-Plane"
+    else:
+      print "not enough points in this x-Plane"
 
 
   # create Y Planes
@@ -356,78 +373,95 @@ def getPlaneValues(oObject, gObject):
         yPlanePointsG.append(pointN)
 
     # find the distance from the Points to the origin
-    for pointO in yPlanePointsO:
-      yPlaneOriginDistO.append(sqrt(pointO[0]**2+pointO[2]**2))
-    for pointP in yPlanePointsG:
-      yPlaneOriginDistG.append(sqrt(pointP[0]**2+pointP[2]**2))
+    if len(yPlanePointsO) > 1 and len(yPlanePointsG) > 1:
+      for pointO in yPlanePointsO:
+        yPlaneOriginDistO.append(sqrt(pointO[0]**2+pointO[2]**2))
+      for pointP in yPlanePointsG:
+        yPlaneOriginDistG.append(sqrt(pointP[0]**2+pointP[2]**2))
 
     # store the Distances to the farest point from the origin
-    for pointQ in yPlanePointsO:
-      if sqrt(pointQ[0]**2+pointQ[2]**2) == max(yPlaneOriginDistO):
-        for pointR in yPlanePointsO:
-          if vtkMath.Distance2BetweenPoints(pointQ,pointR) == 0:
-            pass
+    if len(yPlaneOriginDistO) > 1 and len(yPlaneOriginDistG) > 1:
+      for pointQ in yPlanePointsO:
+        if sqrt(pointQ[0]**2+pointQ[2]**2) == max(yPlaneOriginDistO):
+          for pointR in yPlanePointsO:
+            if vtkMath.Distance2BetweenPoints(pointQ,pointR) == 0:
+              pass
+            else:
+              yPlanePointDistO.append(sqrt(vtkMath.Distance2BetweenPoints(pointQ,pointR)))
+      for pointS in yPlanePointsG:
+        if sqrt(pointS[0]**2+pointS[2]**2) == max(yPlaneOriginDistG):
+          for pointT in yPlanePointsG:
+            if vtkMath.Distance2BetweenPoints(pointS,pointT) == 0:
+              pass
+            else:
+              yPlanePointDistG.append(sqrt(vtkMath.Distance2BetweenPoints(pointS,pointT)))
+
+    if len(yPlanePointDistO) > 0 and len(yPlanePointDistG) > 0:
+      # get average Point distances
+      for dist5 in yPlanePointDistO:
+        yPlaneAvgPointDistO += dist5
+      yPlaneAvgPointDistO = yPlaneAvgPointDistO/len(yPlanePointDistO)
+      for dist6 in yPlanePointDistG:
+        yPlaneAvgPointDistG += dist6
+      yPlaneAvgPointDistG = yPlaneAvgPointDistG/len(yPlanePointDistG)
+
+      # get the standard deviation of these distances
+      for g in yPlanePointDistO:
+        yPlaneStdDevDistO += (g - yPlaneAvgPointDistO)**2
+      yPlaneStdDevDistO = sqrt(yPlaneStdDevDistO/len(yPlanePointDistO))
+      for h in yPlanePointDistG:
+        yPlaneStdDevDistG += (h - yPlaneAvgPointDistG)**2
+      yPlaneStdDevDistG = sqrt(yPlaneStdDevDistG/len(yPlanePointDistG))
+
+      # get angles between points
+      for pointU in yPlanePointsO:
+        if sqrt(pointU[0]**2+pointU[2]**2) == max(yPlaneOriginDistO):
+          for pointV in yPlanePointsO:
+            if vtkMath.Distance2BetweenPoints(pointU,pointV) == 0:
+              pass
+            else:
+              yPlanePointAnglesO.append(atan2(pointV[2]-pointU[2],pointV[0]-pointU[0]))
+      for pointW in yPlanePointsG:
+        if sqrt(pointW[0]**2+pointW[2]**2) == max(yPlaneOriginDistG):
+          for pointX in yPlanePointsG:
+            if vtkMath.Distance2BetweenPoints(pointW,pointX) == 0:
+              pass
+            else:
+              yPlanePointAnglesG.append(atan2(pointX[2]-pointW[2],pointX[0]-pointX[0]))
+
+    if len(yPlanePointAnglesO) > 0 and len(yPlanePointAnglesG) > 0:
+      # get the average angle
+      for dist7 in yPlanePointAnglesO:
+        yPlaneAvgAngleO += dist7
+      yPlaneAvgAngleO = yPlaneAvgAngleO/len(yPlanePointAnglesO)
+      for dist8 in yPlanePointAnglesG:
+        yPlaneAvgAngleG += dist8
+      yPlaneAvgAngleG = yPlaneAvgAngleG/len(yPlanePointAnglesG)
+
+      # get the standard deviation of the angles
+      for i in yPlanePointAnglesO:
+        yPlaneStdDevAngleO += (i - yPlaneAvgPointDistO)**2
+      yPlaneStdDevAngleO = sqrt(yPlaneStdDevAngleO/len(yPlanePointAnglesO))
+      for j in yPlanePointAnglesG:
+        yPlaneStdDevAngleG += (j - yPlaneAvgPointDistG)**2
+      yPlaneStdDevAngleG = sqrt(yPlaneStdDevAngleG/len(yPlanePointAnglesG))
+
+    if yPlaneAvgPointDistO != 0 and yPlaneAvgPointDistG != 0:
+      if yPlaneAvgAngleO != 0 and yPlaneAvgAngleG != 0:
+        if yPlaneStdDevDistO != 0 and yPlaneStdDevDistG != 0:
+          if yPlaneStdDevAngleO != 0 and yPlaneStdDevAngleG != 0:
+            # get axis value and store it
+            axisValueY = (1/(1+(zeta*(abs((yPlaneAvgPointDistO - yPlaneAvgPointDistG)/yPlaneAvgPointDistO)))))*(1/(1+(eta*(abs((yPlaneAvgAngleO - yPlaneAvgAngleG)/yPlaneAvgAngleO)))))*(1/(1+(theta*(abs(yPlaneStdDevDistO - yPlaneStdDevDistG)/yPlaneStdDevDistO))))*(1/(1+(iota*(abs(yPlaneStdDevAngleO - yPlaneStdDevAngleG)/yPlaneStdDevAngleO))))
+            yPlaneValues.append(axisValueY)
+            print "Axis Value for y Plane nr. %s is: %s" %(y,axisValueY)
           else:
-            yPlanePointDistO.append(sqrt(vtkMath.Distance2BetweenPoints(pointQ,pointR)))
-    for pointS in yPlanePointsG:
-      if sqrt(pointS[0]**2+pointS[2]**2) == max(yPlaneOriginDistG):
-        for pointT in yPlanePointsG:
-          if vtkMath.Distance2BetweenPoints(pointS,pointT) == 0:
-            pass
-          else:
-            yPlanePointDistG.append(sqrt(vtkMath.Distance2BetweenPoints(pointS,pointT)))
-
-    # get average Point distances
-    for dist5 in yPlanePointsDistO:
-      yPlaneAvgPointDistO += dist5
-    yPlaneAvgPointDistO = yPlaneAvgPointDistO/len(yPlanePointsDistO)
-    for dist6 in yPlanePointsDistG:
-      yPlaneAvgPointDistG += dist6
-    yPlaneAvgPointDistG = yPlaneAvgPointDistG/len(yPlanePointsDistG)
-
-    # get the standard deviation of these distances
-    for g in yPlanePointsDistO:
-      yPlaneStdDevDistO += (g - yPlaneAvgPointDistO)**2
-    yPlaneStdDevDistO = sqrt(yPlaneStdDevDistO/len(yPlanePointsDistO))
-    for h in yPlanePointsDistG:
-      yPlaneStdDevDistG += (h - yPlaneAvgPointDistG)**2
-    yPlaneStdDevDistG = sqrt(yPlaneStdDevDistG/len(yPlanePointsDistG))
-
-    # get angles between points
-    for pointU in yPlanePointsO:
-      if sqrt(pointU[0]**2+pointU[2]**2) == max(yPlaneOriginDistO):
-        for pointV in yPlanePointsO:
-          if vtkMath.Distance2BetweenPoints(pointU,pointV) == 0:
-            pass
-          else:
-            yPlanePointAnglesO.append(atan2(pointV[2]-pointU[2],pointV[0]-pointU[0]))
-    for pointW in yPlanePointsG:
-      if sqrt(pointW[0]**2+pointW[2]**2) == max(yPlaneOriginDistG):
-        for pointX in yPlanePointsG:
-          if vtkMath.Distance2BetweenPoints(pointW,pointX) == 0:
-            pass
-          else:
-            yPlanePointAnglesG.append(atan2(pointX[2]-pointW[2],pointX[0]-pointX[0]))
-
-    # get the average angle
-    for dist7 in yPlanePointAnglesO:
-      yPlaneAvgAngleO += dist7
-    yPlaneAvgAngleO = yPlaneAvgAngleO/len(yPlanePointAnglesO)
-    for dist8 in yPlanePointAnglesG:
-      yPlaneAvgAngleG += dist8
-    yPlaneAvgAngleG = yPlaneAvgAngleG/len(yPlanePointAnglesG)
-
-    # get the standard deviation of the angles
-    for i in yPlanePointAnglesO:
-      yPlaneStdDevAngleO += (i - yPlaneAvgPointDistO)**2
-    yPlaneStdDevAngleO = sqrt(yPlaneStdDevAngleO/len(yPlanePointAnglesO))
-    for j in yPlanePointAnglesG:
-      yPlaneStdDevAngleG += (j - yPlaneAvgPointDistG)**2
-    yPlaneStdDevAngleG = sqrt(yPlaneStdDevAngleG/len(yPlanePointAnglesG))
-
-    # get axis value and store it
-    axisValueY = (1/(1+(zeta*(abs((yPlaneAvgPointDistO - yPlaneAvgPointDistG)/yPlaneAvgPointDistO)))))*(1/(1+(eta*(abs((yPlaneAvgAngleO - yPlaneAvgAngleG)/yPlaneAvgAngleO)))))*(1/(1+(theta*(abs(yPlaneStdDevDistO - yPlaneStdDevDistG)/yPlaneStdDevDistO))))*(1/(1+(iota*(abs(yPlaneStdDevAngleO - yPlaneStdDevAngleG)/yPlaneStdDevAngleO))))
-    yPlaneValues.append(axisValueY)
+            print "no angle std deviation in this y-Pane"
+        else:
+          print "no distance std deviation in this y-Plane"
+      else:
+        print "not enough angles in this y-Plane"
+    else:
+      print "not enough points in this y-Plane"
 
 
   # create Z Planes
@@ -458,95 +492,135 @@ def getPlaneValues(oObject, gObject):
         zPlanePointsG.append(pointZ)
 
     # find the distance from the Points to the origin
-    for pointAA in zPlanePointsO:
-      zPlaneOriginDistO.append(sqrt(pointAA[1]**2+pointAA[0]**2))
-    for pointAB in zPlanePointsG:
-      zPlaneOriginDistG.append(sqrt(pointAB[1]**2+pointAB[0]**2))
+    if len(zPlanePointsO) > 1 and len(zPlanePointsG) > 1:
+      for pointAA in zPlanePointsO:
+        zPlaneOriginDistO.append(sqrt(pointAA[1]**2+pointAA[0]**2))
+      for pointAB in zPlanePointsG:
+        zPlaneOriginDistG.append(sqrt(pointAB[1]**2+pointAB[0]**2))
 
     # store the Distances to the farest point from the origin
-    for pointAC in zPlanePointsO:
-      if sqrt(pointAC[1]**2+pointAC[0]**2) == max(zPlaneOriginDistO):
-        for pointAD in zPlanePointsO:
-          if vtkMath.Distance2BetweenPoints(pointAC,pointAD) == 0:
-            pass
+    if len(zPlaneOriginDistO) > 1 and len(zPlaneOriginDistG) > 1:
+      for pointAC in zPlanePointsO:
+        if sqrt(pointAC[1]**2+pointAC[0]**2) == max(zPlaneOriginDistO):
+          for pointAD in zPlanePointsO:
+            if vtkMath.Distance2BetweenPoints(pointAC,pointAD) == 0:
+              pass
+            else:
+              zPlanePointDistO.append(sqrt(vtkMath.Distance2BetweenPoints(pointAC,pointAD)))
+      for pointAE in zPlanePointsG:
+        if sqrt(pointAE[1]**2+pointAE[0]**2) == max(zPlaneOriginDistG):
+          for pointAF in zPlanePointsG:
+            if vtkMath.Distance2BetweenPoints(pointAE,pointAF) == 0:
+              pass
+            else:
+              zPlanePointDistG.append(sqrt(vtkMath.Distance2BetweenPoints(pointAE,pointAF)))
+
+    if len(zPlanePointDistO) > 0 and len(zPlanePointDistG) > 0:
+      # get average Point distances
+      for dist9 in zPlanePointDistO:
+        zPlaneAvgPointDistO += dist9
+      zPlaneAvgPointDistO = zPlaneAvgPointDistO/len(zPlanePointDistO)
+      for dist10 in zPlanePointDistG:
+        zPlaneAvgPointDistG += dist10
+      zPlaneAvgPointDistG = zPlaneAvgPointDistG/len(zPlanePointDistG)
+
+      # get the standard deviation of these distances
+      for k in zPlanePointDistO:
+        zPlaneStdDevDistO += (k - zPlaneAvgPointDistO)**2
+      zPlaneStdDevDistO = sqrt(zPlaneStdDevDistO/len(zPlanePointDistO))
+      for l in zPlanePointDistG:
+        zPlaneStdDevDistG += (l - zPlaneAvgPointDistG)**2
+      zPlaneStdDevDistG = sqrt(zPlaneStdDevDistG/len(zPlanePointDistG))
+
+      # get angles between points
+      for pointAG in zPlanePointsO:
+        if sqrt(pointAG[1]**2+pointAG[0]**2) == max(zPlaneOriginDistO):
+          for pointAH in zPlanePointsO:
+            if vtkMath.Distance2BetweenPoints(pointAG,pointAH) == 0:
+              pass
+            else:
+              zPlanePointAnglesO.append(atan2(pointAH[1]-pointAG[1],pointAH[0]-pointAG[0]))
+      for pointAI in zPlanePointsG:
+        if sqrt(pointAI[1]**2+pointAI[0]**2) == max(zPlaneOriginDistG):
+          for pointAJ in zPlanePointsG:
+            if vtkMath.Distance2BetweenPoints(pointAI,pointAJ) == 0:
+              pass
+            else:
+              zPlanePointAnglesG.append(atan2(pointAJ[1]-pointAI[1],pointAJ[0]-pointAI[0]))
+
+    if len(zPlanePointAnglesO) > 0 and len(zPlanePointAnglesG) > 0:
+      # get the average angle
+      for dist11 in zPlanePointAnglesO:
+        zPlaneAvgAngleO += dist11
+      zPlaneAvgAngleO = zPlaneAvgAngleO/len(zPlanePointAnglesO)
+      for dist12 in zPlanePointAnglesG:
+        zPlaneAvgAngleG += dist12
+      zPlaneAvgAngleG = zPlaneAvgAngleG/len(zPlanePointAnglesG)
+
+      # get the standard deviation of the angles
+      for m in zPlanePointAnglesO:
+        zPlaneStdDevAngleO += (m - zPlaneAvgPointDistO)**2
+      zPlaneStdDevAngleO = sqrt(zPlaneStdDevAngleO/len(zPlanePointAngles O))
+      for n in zPlanePointAnglesG:
+        zPlaneStdDevAngleG += (n - zPlaneAvgPointDistG)**2
+      zPlaneStdDevAngleG = sqrt(zPlaneStdDevAngleG/len(zPlanePointAnglesG))
+
+    if zPlaneAvgPointDistO != 0 and zPlaneAvgPointDistG != 0:
+      if zPlaneAvgAngleO != 0 and zPlaneAvgAngleG != 0:
+        if zPlaneStdDevDistO != 0 and zPlaneStdDevDistG != 0:
+          if zPlaneStdDevAngleO != 0 and zPlaneStdDevAngleG != 0:
+            # get axis value and store it
+            axisValueZ = (1/(1+(zeta*(abs((zPlaneAvgPointDistO - zPlaneAvgPointDistG)/zPlaneAvgPointDistO)))))*(1/(1+(eta*(abs((zPlaneAvgAngleO - zPlaneAvgAngleG)/zPlaneAvgAngleO)))))*(1/(1+(theta*(abs(zPlaneStdDevDistO - zPlaneStdDevDistG)/zPlaneStdDevDistO))))*(1/(1+(iota*(abs(zPlaneStdDevAngleO - zPlaneStdDevAngleG)/zPlaneStdDevAngleO))))
+            zPlaneValues.append(axisValueZ)
+            print "Axis Value for z Plane nr. %s is: %s" %(z,axisValueZ)
           else:
-            zPlanePointDistO.append(sqrt(vtkMath.Distance2BetweenPoints(pointAC,pointAD)))
-    for pointAE in zPlanePointsG:
-      if sqrt(pointAE[1]**2+pointAE[0]**2) == max(zPlaneOriginDistG):
-        for pointAF in zPlanePointsG:
-          if vtkMath.Distance2BetweenPoints(pointAE,pointAF) == 0:
-            pass
-          else:
-            zPlanePointDistG.append(sqrt(vtkMath.Distance2BetweenPoints(pointAE,pointAF)))
+            print "no angle std deviation in this z-Pane"
+        else:
+          print "no distance std deviation in this z-Plane"
+      else:
+        print "not enough angles in this z-Plane"
+    else:
+      print "not enough points in this z-Plane"
 
-    # get average Point distances
-    for dist9 in zPlanePointsDistO:
-      zPlaneAvgPointDistO += dist9
-    zPlaneAvgPointDistO = zPlaneAvgPointDistO/len(zPlanePointsDistO)
-    for dist10 in zPlanePointsDistG:
-      zPlaneAvgPointDistG += dist10
-    zPlaneAvgPointDistG = zPlaneAvgPointDistG/len(zPlanePointsDistG)
+  if len(xPlaneValues) > 0:
+    for listX in xPlaneValues:
+      xValue += listX
+    xValue = xValue/len(xPlaneValues)
 
-    # get the standard deviation of these distances
-    for k in zPlanePointsDistO:
-      zPlaneStdDevDistO += (k - zPlaneAvgPointDistO)**2
-    zPlaneStdDevDistO = sqrt(zPlaneStdDevDistO/len(zPlanePointsDistO))
-    for l in zPlanePointsDistG:
-      zPlaneStdDevDistG += (l - zPlaneAvgPointDistG)**2
-    zPlaneStdDevDistG = sqrt(zPlaneStdDevDistG/len(zPlanePointsDistG))
+  if len(yPlaneValues) > 0:
+    for listY in yPlaneValues:
+      yValue += listY
+    yValue = yValue/len(yPlaneValues)
 
-    # get angles between points
-    for pointAG in zPlanePointsO:
-      if sqrt(pointAG[1]**2+pointAG[0]**2) == max(zPlaneOriginDistO):
-        for pointAH in zPlanePointsO:
-          if vtkMath.Distance2BetweenPoints(pointAG,pointAH) == 0:
-            pass
-          else:
-            zPlanePointAnglesO.append(atan2(pointAH[1]-pointAG[1],pointAH[0]-pointAG[0]))
-    for pointAI in zPlanePointsG:
-      if sqrt(pointAI[1]**2+pointAI[0]**2) == max(zPlaneOriginDistG):
-        for pointAJ in zPlanePointsG:
-          if vtkMath.Distance2BetweenPoints(pointAI,pointAJ) == 0:
-            pass
-          else:
-            zPlanePointAnglesG.append(atan2(pointAJ[1]-pointAI[1],pointAJ[0]-pointAI[0]))
+  if len(zPlaneValues) > 0:
+    for listZ in zPlaneValues:
+      zValue += listZ
+    zValue = zValue/len(zPlaneValues)
 
-    # get the average angle
-    for dist11 in zPlanePointAnglesO:
-      zPlaneAvgAngleO += dist11
-    zPlaneAvgAngleO = zPlaneAvgAngleO/len(zPlanePointAnglesO)
-    for dist12 in zPlanePointAnglesG:
-      zPlaneAvgAngleG += dist12
-    zPlaneAvgAngleG = zPlaneAvgAngleG/len(zPlanePointAnglesG)
-
-    # get the standard deviation of the angles
-    for m in zPlanePointAnglesO:
-      zPlaneStdDevAngleO += (m - zPlaneAvgPointDistO)**2
-    zPlaneStdDevAngleO = sqrt(zPlaneStdDevAngleO/len(zPlanePointAnglesO))
-    for n in zPlanePointAnglesG:
-      zPlaneStdDevAngleG += (n - zPlaneAvgPointDistG)**2
-    zPlaneStdDevAngleG = sqrt(zPlaneStdDevAngleG/len(zPlanePointAnglesG))
-
-    # get axis value and store it
-    axisValueZ = (1/(1+(zeta*(abs((zPlaneAvgPointDistO - zPlaneAvgPointDistG)/zPlaneAvgPointDistO)))))*(1/(1+(eta*(abs((zPlaneAvgAngleO - zPlaneAvgAngleG)/zPlaneAvgAngleO)))))*(1/(1+(theta*(abs(zPlaneStdDevDistO - zPlaneStdDevDistG)/zPlaneStdDevDistO))))*(1/(1+(iota*(abs(zPlaneStdDevAngleO - zPlaneStdDevAngleG)/zPlaneStdDevAngleO))))
-    zPlaneValues.append(axisValueZ)
+  if xValue > 0 and yValue > 0 and zValue > 0:
+    finalValuePlane = (xValue + yValue + zValue)/3
+  else:
+    print "a plane value is lost"
+    if xValue > 0:
+      if yValue > 0:
+        finalValuePlane = (xValue + yValue)/2
+      else:
+        if zValue > 0:
+          finalValuePlane = (xValue + zValue)/2
+        else:
+          finalValuePlane = xValue
+    else:
+      if yValue > 0:
+        finalValuePlane = (zValue + yValue)/2
+      else:
+        if zValue > 0:
+          finalValuePlane = zValue
+        else:
+          print "final plane value is completely lost"
 
 
-  for listX in xPlaneValues:
-    xValue += listX
-  xValue = xValue/len(xPlaneValues)
-
-  for listY in yPlaneValues:
-    yValue += listY
-  yValue = yValue/len(yPlaneValues)
-
-  for listZ in zPlaneValues:
-    zValue += listZ
-  zValue = zValue/len(zPlaneValues)
-
-  finalValuePlane = (xValue + yValue + zValue)/3
-  print finalValuePlane
   generatedObject.valuePlane = finalValuePlane
+  print "final plane value: %s" %(finalValuePlane)
 
 #get a value by comparing surface area as well as volume
 def getBoundaryValue(orObject, geObject):
@@ -555,8 +629,14 @@ def getBoundaryValue(orObject, geObject):
   combinedValue = 0
   orObject.getPropertyInfo()
   geObject.getPropertyInfo()
-  volumeValue = 1/(1+(kappa*abs((orObject.vol - geObject.vol)/orObject.vol)))
-  surfaceValue = 1/(1+(my*abs((orObject.surfA - geObject.surfA)/orObject.surfA)))
+  if orObject.vol > 0 and geObject.vol > 0:
+    if orObject.surfA > 0 and geObject.surfA > 0:
+      volumeValue = 1/(1+(kappa*abs((orObject.vol - geObject.vol)/orObject.vol)))
+      surfaceValue = 1/(1+(my*abs((orObject.surfA - geObject.surfA)/orObject.surfA)))
+    else:
+      print "surface Areas are empty"
+  else:
+    print "volumes are empty"
   combinedValue = surfaceValue * volumeValue
   geObject.valueBoundary = combinedValue
 
@@ -567,6 +647,7 @@ def getSimilarityValue(original, generated):
   getHD(original, generated)
   getPlaneValues(original, generated)
   simValue = ((sigma * generated.valueBoundary) + (rho * generated.valuePlane) + (omega * generated.valueHD)/(sigma + rho + omega))
+  print simValue
   generated.similartiy = simValue
 
 
@@ -583,6 +664,8 @@ originalObject.updateCoordinates()
 generatedObject.updateCoordinates()
 originalObject.buildNegative()
 generatedObject.buildNegative()
+getSimilarityValue(originalObject, generatedObject)
+writeBack()
 originalObject.visualize()
 generatedObject.visualize()
 
@@ -640,6 +723,4 @@ interactor2.Start()
 """
 -  print Befehle entfernen
 -  zentrierung?
--  Ausgangspunkt für Ebenen prüfen
--  if befehle für Listenlänge
 """
