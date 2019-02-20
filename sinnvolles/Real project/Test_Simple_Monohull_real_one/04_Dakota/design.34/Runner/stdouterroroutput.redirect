@@ -1,0 +1,34 @@
+Moving C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/Real project/Test_Simple_Monohull_real_one/04_Dakota/design.34/Runner/input/generated_shape.stl to C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/Real project/Test_Simple_Monohull_real_one/04_Dakota/design.34/Runner//generated_shape.stl
+Moving C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/Real project/Test_Simple_Monohull_real_one/04_Dakota/design.34/Runner/input/original_shape.stl to C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/Real project/Test_Simple_Monohull_real_one/04_Dakota/design.34/Runner//original_shape.stl
+
+[Captured output from application C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/run2.bat]
+
+
+C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\04_Dakota\design.34\Runner>"C:\Program Files\VTK 7.1.1\bin\vtkpython" C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\SimilarityRatingCode.py 
+
+original_shape.stl succesfully stored. Length of the storing array: 748
+
+Number of Points in original_shape.stl updated: 748
+
+generated_shape.stl succesfully stored. Length of the storing array: 748
+
+Number of Points in generated_shape.stl updated: 748
+
+Number of Points in original_shape.stl updated: 748
+
+Number of Points in generated_shape.stl updated: 748
+updated
+negatives built
+orignal volume: 0
+generated volume: 0
+volumes are empty
+Boundary value is: 0
+finalValueHD is: 0.999809754964
+Axis Value for x Plane nr. 0 is: 0.999986333373
+Axis Value for x Plane nr. 1 is: 0.999986333373
+Axis Value for y Plane nr. 0 is: 0.999968650187
+Axis Value for y Plane nr. 1 is: 0.999968650187
+Axis Value for z Plane nr. 0 is: 0.999968907299
+Axis Value for z Plane nr. 1 is: 0.999968907299
+final plane value: 0.999974630286
+similarity is: 0.666594795083

@@ -1,0 +1,34 @@
+
+
+method
+  coliny_cobyla
+  initial_delta 0.1
+  scaling
+  seed 12345
+  output debug
+  max_function_evaluations = 36
+ 
+variables
+  continuous_design = 6
+  cdv_initial_point  19.5449 2.32759 0.717913 23.5829 0 0.717913
+  cdv_lower_bounds  18 1 0 20 0 0
+  cdv_upper_bounds  22 3 1.5 26 1 1.5
+  cdv_descriptor  '|BaseLine01|DesignVariables|u3_v2_x' '|BaseLine01|DesignVariables|u3_v2_y' '|BaseLine01|DesignVariables|u3_v2_z' '|BaseLine01|DesignVariables|u4_v2_x' '|BaseLine01|DesignVariables|u4_v2_y' '|BaseLine01|DesignVariables|u4_v2_z'
+  scale_types  'auto' 'auto' 'auto' 'auto' 'auto' 'auto'
+
+responses
+  objective_functions = 1
+  nonlinear_inequality_constraints = 0
+  no_gradients
+  no_hessians
+  
+interface
+  fork
+  analysis_driver = 'fdakota_client.exe'
+  verbatim  parameters_file = 'params.in'
+  results_file    = 'results.out'
+  work_directory directory_tag
+  named 'design' file_save directory_save
+
+  asynchronous
+  evaluation_concurrency = 8

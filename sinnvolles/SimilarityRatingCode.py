@@ -648,34 +648,37 @@ def getSimilarityValue():
   getPlaneValues()
   simValue = (((sigma * generatedObject.valueBoundary) + (rho * generatedObject.valuePlane) + (omega * generatedObject.valueHD))/(sigma + rho + omega))
   print "similarity is: %s" %(simValue)
-  generatedObject.similarity = simValue
+  generatedObject.similarity = 1 - simValue
 
 
 def writeBack():
   file1 = open("SimilarityValue.txt","w")
-  file1.write("%s"%generatedObject.similarity)
+  file1.write("%s\n"%generatedObject.similarity)
+  file1.write("%s\n"%generatedObject.valueBoundary)
+  file1.write("%s\n"%generatedObject.valueHD)
+  file1.write("%s"%generatedObject.valuePlane)
+
   file1.close()
 
 
 
-originalObject = STL_Object("initial_shape.stl")
-generatedObject = STL_Object("initial_shape.stl")
+originalObject = STL_Object("original_shape.stl")
+generatedObject = STL_Object("generated_shape.stl")
 originalObject.updateCoordinates()
 generatedObject.updateCoordinates()
 print "updated"
-originalObject.buildNegative()
-print "original reversed"
-generatedObject.buildNegative()
+#originalObject.buildNegative()
+#generatedObject.buildNegative()
 print "negatives built"
 getSimilarityValue()
 writeBack()
-originalObject.visualize()
-generatedObject.visualize()
+#originalObject.visualize()
+#generatedObject.visualize()
 
 
 
 
-
+"""
 renderer = vtk.vtkRenderer()
 renderer.AddActor(originalObject.actor)
 renderer.SetBackground(1,1,1)
@@ -718,7 +721,7 @@ interactor.Initialize()
 interactor.Start() 
 interactor2.Initialize()
 interactor2.Start() 
-
+"""
 
 
 

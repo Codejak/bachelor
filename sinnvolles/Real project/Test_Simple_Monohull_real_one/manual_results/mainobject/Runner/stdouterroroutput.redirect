@@ -1,23 +1,34 @@
-Moving C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/Real project/Test_Simple_Monohull_real_one/manual_results/mainobject/Runner/input/geomExpo.stl to C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/Real project/Test_Simple_Monohull_real_one/manual_results/mainobject/Runner//geomExpo.stl
+Moving C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/Real project/Test_Simple_Monohull_real_one/manual_results/mainobject/Runner/input/generated_shape.stl to C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/Real project/Test_Simple_Monohull_real_one/manual_results/mainobject/Runner//generated_shape.stl
+Moving C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/Real project/Test_Simple_Monohull_real_one/manual_results/mainobject/Runner/input/run2.bat to C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/Real project/Test_Simple_Monohull_real_one/manual_results/mainobject/Runner//run2.bat
 
-[Captured output from application C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/run.bat]
+[Captured output from application C:/Users/Jakob/Documents/GitHub/bachelor/sinnvolles/run2.bat]
 
 
-C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\manual_results\mainobject\Runner>cd C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\ 
+C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\manual_results\mainobject\Runner>"C:\Program Files\VTK 7.1.1\bin\vtkpython" C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\SimilarityRatingCode.py 
 
-C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles>"C:\Program Files\VTK 7.1.1\bin\vtkpython" C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Testfeld.py 
+original_shape.stl succesfully stored. Length of the storing array: 748
 
-Trying to store -initial_shape.stl-! Point Number:91572
+Number of Points in original_shape.stl updated: 748
 
-initial_shape.stl succesfully stored. Length of the storing array: 91572
+generated_shape.stl succesfully stored. Length of the storing array: 748
 
-Coordinates of initial_shape.stl succesfully updated. Length of the arrays: 91572, 91572, 91572 
-These are the min/max coordinates: X[-0.40000000596,0.800000011921], Y[-0.10000000149,0.119999997318], Z[-2.77555756156e-17,1.0] 
+Number of Points in generated_shape.stl updated: 748
 
-Number of Points in initial_shape.stl updated: 91572
+Number of Points in original_shape.stl updated: 748
 
-Coordinates of initial_shape.stl succesfully updated. Length of the arrays: 594, 594, 594 
-These are the min/max coordinates: X[1.51198270484e-12,0.019999999553], Y[-0.00999881606549,0.00999879837036], Z[1.00000001169e-07,0.999999880791] 
-
-Number of Points in initial_shape.stl updated: 594
-37634 594 [0.4479004011215292, 0.833478675435467, 0.45188709348517914, 0.027581745460267405]
+Number of Points in generated_shape.stl updated: 748
+updated
+negatives built
+orignal volume: 0
+generated volume: 0
+volumes are empty
+Boundary value is: 0
+finalValueHD is: 1.0
+Axis Value for x Plane nr. 0 is: 1.0
+Axis Value for x Plane nr. 1 is: 1.0
+Axis Value for y Plane nr. 0 is: 1.0
+Axis Value for y Plane nr. 1 is: 1.0
+Axis Value for z Plane nr. 0 is: 1.0
+Axis Value for z Plane nr. 1 is: 1.0
+final plane value: 1.0
+similarity is: 0.666666666667
