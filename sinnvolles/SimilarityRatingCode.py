@@ -2,8 +2,6 @@ from vtk import *
 from math import sqrt, atan2
 
 
-final_shape = "final_shape.stl"
-initial_shape = "initial_shape.stl"
 
 aplha   = 1         # standard deviation influence on the HD value
 beta    = 1         # average HD distance influence on the HD value
@@ -20,7 +18,7 @@ sigma   = 1         # influence of on the final Value
 rho     = 1         # influence of on the final Value
 omega   = 1         # influence of on the final Value
 tolerancevalue = 0.0001
-tolerancevalue2 = 0.00000001
+tolerancevalue2 = 0.000001
 
 # define the class which creates objects store the data of the STL files
 class STL_Object:
@@ -29,6 +27,7 @@ class STL_Object:
 
     # defining the attributes
     self.booleanfilter = vtk.vtkBooleanOperationPolyDataFilter()
+    self.triangledBox = vtk.vtkTriangleFilter()
     self.fileName = fileName
     self.objectPoints = []
     self.xCoordinates = []
@@ -60,10 +59,9 @@ class STL_Object:
 
     # determine the number of Points
     self.numberOfPoints = self.polydata.GetNumberOfPoints()
-    #print "\nTrying to store -%s-! Point Number:%s" %(self.fileName, self.numberOfPoints)
 
     # store the point from the STL file into arrays to work with
-    self.objectPoints = []
+    # self.objectPoints = []
     for x in range(self.numberOfPoints):
       self.objectPoints.append(self.polydata.GetPoints().GetPoint(x))
     print "\n%s succesfully stored. Length of the storing array: %d" %(self.fileName, len(self.objectPoints))
@@ -82,11 +80,12 @@ class STL_Object:
     self.xCoordinates = []
     self.yCoordinates = []
     self.zCoordinates = []
+    print len(self.objectPoints)
     for p in self.objectPoints:
       self.xCoordinates.append(p[0])
       self.yCoordinates.append(p[1])
       self.zCoordinates.append(p[2])
-
+    print len(self.xCoordinates)
     # determine the extrema 
     self.maxX = max(self.xCoordinates)
     self.minX = min(self.xCoordinates)
@@ -101,23 +100,6 @@ class STL_Object:
     #print "\nCoordinates of %s succesfully updated. Length of the arrays: %s, %s, %s \nThese are the min/max coordinates: X[%s,%s], Y[%s,%s], Z[%s,%s] " %(self.fileName, len(self.xCoordinates), len(self.yCoordinates), len(self.zCoordinates), self.minX,self.maxX,self.minY,self.maxY,self.minZ,self.maxZ)
     self.updateNumberOfPoints()
 
-  """
-  # get rid of the irrelevant points
-  def deleteBoxPoints(self):
-    newlist = []
-    for i in self.objectPoints:
-      if (self.minX - 0.1) < i[0] < (self.minX + 0.1):
-        pass
-      elif (self.maxX - 0.1) < i[0] < (self.maxX + 0.1):
-        pass
-      if (self.minY - 0.1) < i[1] < (self.minY + 0.1):
-        pass
-      elif (self.maxY - 0.1) < i[1] < (self.maxY + 0.1):
-        pass
-      else:
-        newlist.append(i)
-      self.objectPoints = newlist
-  """
 
   # reverse the STL file
   def buildNegative(self):
@@ -130,19 +112,19 @@ class STL_Object:
     completeList.append(self.maxY - tolerancevalue) 
     completeList.append(self.minZ + tolerancevalue)
     completeList.append(self.maxZ - tolerancevalue)
+    print completeList
     self.box.SetBounds(completeList)
 
-    self.triangledBox = vtk.vtkTriangleFilter()
     self.triangledBox.SetInputConnection(self.box.GetOutputPort())
     self.triangledBox.Update()
 
+    """
     # get the difference between the box and the file
-    self.booleanfilter = vtk.vtkBooleanOperationPolyDataFilter()
     self.booleanfilter.SetOperationToDifference()
     self.booleanfilter.SetTolerance(tolerancevalue2)
     self.booleanfilter.SetInputConnection(1, self.reader.GetOutputPort())
     self.booleanfilter.SetInputConnection(0, self.triangledBox.GetOutputPort())
-
+    
     self.triangles = vtk.vtkTriangleFilter()
     self.triangles.SetInputConnection(self.booleanfilter.GetOutputPort())
     self.triangles.Update()
@@ -167,13 +149,13 @@ class STL_Object:
     for x in range(self.numberOfPoints):
       self.objectPoints.append(self.polydata.GetPoints().GetPoint(x))
     self.updateCoordinates()
-
+    """
 
   # vizualize the object 
   def visualize(self):
     self.mapper = vtk.vtkPolyDataMapper()
     #self.mapper.SetInputData(self.polydata)
-    self.mapper.SetInputConnection(self.booleanfilter.GetOutputPort())
+    self.mapper.SetInputConnection(self.triangledBox.GetOutputPort())
     self.mapper.ScalarVisibilityOff()
     self.actor = vtk.vtkActor()
     self.actor.SetMapper(self.mapper)
@@ -654,31 +636,30 @@ def getSimilarityValue():
 def writeBack():
   file1 = open("SimilarityValue.txt","w")
   file1.write("%s\n"%generatedObject.similarity)
-  file1.write("%s\n"%generatedObject.valueBoundary)
-  file1.write("%s\n"%generatedObject.valueHD)
-  file1.write("%s"%generatedObject.valuePlane)
+  #file1.write("%s\n"%generatedObject.valueBoundary)
+  #file1.write("%s\n"%generatedObject.valueHD)
+  #file1.write("%s"%generatedObject.valuePlane)
 
   file1.close()
 
 
 
 originalObject = STL_Object("original_shape.stl")
+# originalObject.updateCoordinates()
+originalObject.buildNegative()
 generatedObject = STL_Object("generated_shape.stl")
-originalObject.updateCoordinates()
-generatedObject.updateCoordinates()
-print "updated"
-#originalObject.buildNegative()
+## generatedObject.updateCoordinates()
 #generatedObject.buildNegative()
 print "negatives built"
-getSimilarityValue()
-writeBack()
-#originalObject.visualize()
-#generatedObject.visualize()
+#getSimilarityValue()
+#writeBack()
+originalObject.visualize()
+generatedObject.visualize()
 
 
 
 
-"""
+
 renderer = vtk.vtkRenderer()
 renderer.AddActor(originalObject.actor)
 renderer.SetBackground(1,1,1)
@@ -721,7 +702,6 @@ interactor.Initialize()
 interactor.Start() 
 interactor2.Initialize()
 interactor2.Start() 
-"""
 
 
 

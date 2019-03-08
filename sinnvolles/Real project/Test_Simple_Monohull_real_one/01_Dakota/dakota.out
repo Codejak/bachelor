@@ -1,0 +1,1537 @@
+Dakota version 6.9 released Nov 13 2018.
+Repository revision 32b6d4be (2018-11-12) built Nov 13 2018 01:41:56.
+Running serial Dakota executable in serial mode.
+Start time: Fri Mar  8 17:28:19 2019
+
+-----------------------
+Begin DAKOTA input file
+dakota.in
+-----------------------
+
+
+method
+  coliny_cobyla
+  initial_delta 0.1
+  scaling
+  seed 12345
+  output debug
+  max_function_evaluations = 36
+ 
+variables
+  continuous_design = 6
+  cdv_initial_point  19.5449 2.32759 0.717913 23.5829 0 0.717913
+  cdv_lower_bounds  18 1 0 20 0 0
+  cdv_upper_bounds  22 3 1.5 26 1 1.5
+  cdv_descriptor  '|BaseLine01|DesignVariables|u3_v2_x' '|BaseLine01|DesignVariables|u3_v2_y' '|BaseLine01|DesignVariables|u3_v2_z' '|BaseLine01|DesignVariables|u4_v2_x' '|BaseLine01|DesignVariables|u4_v2_y' '|BaseLine01|DesignVariables|u4_v2_z'
+  scale_types  'auto' 'auto' 'auto' 'auto' 'auto' 'auto'
+
+responses
+  objective_functions = 1
+  nonlinear_inequality_constraints = 0
+  no_gradients
+  no_hessians
+  
+interface
+  fork
+  analysis_driver = 'fdakota_client.exe'
+  verbatim  parameters_file = 'params.in'
+  results_file    = 'results.out'
+  work_directory directory_tag
+  named 'design' file_save directory_save
+
+  asynchronous
+  evaluation_concurrency = 8
+---------------------
+End DAKOTA input file
+---------------------
+
+Using Dakota input file 'dakota.in'
+Writing new restart file 'dakota.rst'.
+methodName = coliny_cobyla
+Gradient type = none Hessian type = none
+Initializing scaling transformation
+
+ScalingModel: Scaling enabled ('auto' scaling is reported as derived values)
+
+Continuous design variable scales:
+scale type        multiplier            offset label
+value                      4                18 |BaseLine01|DesignVariables|u3_v2_x
+value                      2                 1 |BaseLine01|DesignVariables|u3_v2_y
+value                    1.5                 0 |BaseLine01|DesignVariables|u3_v2_z
+value                      6                20 |BaseLine01|DesignVariables|u4_v2_x
+value                      1                 0 |BaseLine01|DesignVariables|u4_v2_y
+value                    1.5                 0 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Seed (user-specified) = 12345
+
+>>>>> Executing environment.
+
+>>>>> Running coliny_cobyla iterator.
+
+>>>>> coliny_cobyla: pre-run phase.
+
+>>>>> coliny_cobyla: core run phase.
+COLIN Solver initial status and options:
+---
+constraint-tolerance: 1.49011611938477e-08
+debug: 10000
+initial-step: 0.1
+max-iters: 0
+max-neval: 36
+max-neval-curr: 0
+max-time: 0
+seed: 12345
+step-tolerance: 0.0001
+sufficient-objective-value: -Infinity
+...
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8622500000e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6379500000e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9715000000e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation    1
+---------------------
+Parameters for evaluation 1:
+                      1.9544900000e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3275900000e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582900000e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.1".
+Changing directory to "design.1"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 1:
+Active set vector = { 1 }
+                      3.3333400000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      4.8622500000e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6379500000e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9715000000e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation    2
+---------------------
+Parameters for evaluation 2:
+                      1.9944900000e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3275900000e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582900000e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.2".
+Changing directory to "design.2"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 2:
+Active set vector = { 1 }
+                      3.6708700000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8622500000e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      7.6379500000e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9715000000e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation    3
+---------------------
+Parameters for evaluation 3:
+                      1.9544900000e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.5275900000e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582900000e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.3".
+Changing directory to "design.3"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 3:
+Active set vector = { 1 }
+                      3.8558100000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8622500000e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6379500000e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      5.7860866667e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9715000000e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation    4
+---------------------
+Parameters for evaluation 4:
+                      1.9544900000e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3275900000e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      8.6791300000e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582900000e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.4".
+Changing directory to "design.4"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 4:
+Active set vector = { 1 }
+                      3.6981800000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8622500000e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6379500000e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      6.9715000000e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation    5
+---------------------
+Parameters for evaluation 5:
+                      1.9544900000e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3275900000e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.4182900000e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.5".
+Changing directory to "design.5"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 5:
+Active set vector = { 1 }
+                      3.9126400000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8622500000e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6379500000e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9715000000e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.0000000000e-01 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation    6
+---------------------
+Parameters for evaluation 6:
+                      1.9544900000e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3275900000e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582900000e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.0000000000e-01 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.6".
+Changing directory to "design.6"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 6:
+Active set vector = { 1 }
+                      3.7167000000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8622500000e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6379500000e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9715000000e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      5.7860866667e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation    7
+---------------------
+Parameters for evaluation 7:
+                      1.9544900000e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3275900000e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582900000e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      8.6791300000e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.7".
+Changing directory to "design.7"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 7:
+Active set vector = { 1 }
+                      3.5493000000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.5069034514e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.0879013784e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.4019885575e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.3616216023e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.1102230246e-17 |BaseLine01|DesignVariables|u4_v2_y
+                      4.5587272005e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation    8
+---------------------
+Parameters for evaluation 8:
+                      1.9402761381e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.2175802757e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      6.6029828363e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3216972961e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.1102230246e-17 |BaseLine01|DesignVariables|u4_v2_y
+                      6.8380908007e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.8".
+Changing directory to "design.8"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 8:
+Active set vector = { 1 }
+                      3.7936600000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.6845767257e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.3629256892e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.5940376121e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.6665608011e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      5.5511151231e-18 |BaseLine01|DesignVariables|u4_v2_y
+                      4.6724069336e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation    9
+---------------------
+Parameters for evaluation 9:
+                      1.9473830690e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.2725851378e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      6.8910564181e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3399936481e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      5.5511151231e-18 |BaseLine01|DesignVariables|u4_v2_y
+                      7.0086104003e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.9".
+Changing directory to "design.9"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 9:
+Active set vector = { 1 }
+                      3.5754900000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      4.1053431374e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6036086285e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7621061396e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9334232558e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.0408340856e-18 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7718918563e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   10
+---------------------
+Parameters for evaluation 10:
+                      1.9642137255e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3207217257e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1431592094e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3560053953e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.0408340856e-18 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1578377844e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.10".
+Changing directory to "design.10"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 10:
+Active set vector = { 1 }
+                      3.4856900000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8622500000e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.7095157106e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.6836008186e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9715000000e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   11
+---------------------
+Parameters for evaluation 11:
+                      1.9544900000e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3419031421e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.0254012278e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582900000e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.11".
+Changing directory to "design.11"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 11:
+Active set vector = { 1 }
+                      3.5128400000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8113266998e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6889921682e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      5.0154854971e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9074146885e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      6.9388939039e-19 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7621959988e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   12
+---------------------
+Parameters for evaluation 12:
+                      1.9524530680e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3377984336e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.5232282456e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3544448813e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      6.9388939039e-19 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1432939983e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.12".
+Changing directory to "design.12"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 12:
+Active set vector = { 1 }
+                      3.4475000000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8622500000e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6379500000e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9715000000e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.2500000000e-02 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   13
+---------------------
+Parameters for evaluation 13:
+                      1.9544900000e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3275900000e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582900000e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.2500000000e-02 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.13".
+Changing directory to "design.13"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 13:
+Active set vector = { 1 }
+                      3.5010200000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8258491168e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.4937455439e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.8238892766e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      6.1681198694e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7690091912e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   14
+---------------------
+Parameters for evaluation 14:
+                      1.9530339647e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.2987491088e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.2358339150e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3700871922e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1535137868e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.14".
+Changing directory to "design.14"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 14:
+Active set vector = { 1 }
+                      3.6218800000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8622500000e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6011241557e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.8009449002e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9517856904e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      3.7393418031e-19 |BaseLine01|DesignVariables|u4_v2_y
+                      4.9029602569e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   15
+---------------------
+Parameters for evaluation 15:
+                      1.9544900000e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3202248311e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.2014173502e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3571071414e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      3.7393418031e-19 |BaseLine01|DesignVariables|u4_v2_y
+                      7.3544403853e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.15".
+Changing directory to "design.15"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 15:
+Active set vector = { 1 }
+                      3.3673100000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8070962216e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.8478200743e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.6705304652e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9655059563e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.3877787808e-18 |BaseLine01|DesignVariables|u4_v2_y
+                      4.8310694229e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   16
+---------------------
+Parameters for evaluation 16:
+                      1.9522838489e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3695640149e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.0057956977e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3579303574e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.3877787808e-18 |BaseLine01|DesignVariables|u4_v2_y
+                      7.2466041344e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.16".
+Changing directory to "design.16"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 16:
+Active set vector = { 1 }
+                      3.5312700000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8167156265e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.5820398803e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7461292450e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.8845229404e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.3877787808e-18 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7505328356e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   17
+---------------------
+Parameters for evaluation 17:
+                      1.9526686251e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3164079761e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1191938675e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3530713764e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.3877787808e-18 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1257992534e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.17".
+Changing directory to "design.17"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 17:
+Active set vector = { 1 }
+                      3.4125500000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8511569670e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6920547440e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7599674973e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9745515151e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7989065164e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   18
+---------------------
+Parameters for evaluation 18:
+                      1.9540462787e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3384109488e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1399512460e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3584730909e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1983597746e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.18".
+Changing directory to "design.18"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 18:
+Active set vector = { 1 }
+                      3.5131300000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8632749688e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6503745330e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.8083377598e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9535483899e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      2.6217855995e-19 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7841446401e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   19
+---------------------
+Parameters for evaluation 19:
+                      1.9545309988e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3300749066e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.2125066396e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3572129034e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      2.6217855995e-19 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1762169601e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.19".
+Changing directory to "design.19"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 19:
+Active set vector = { 1 }
+                      3.3622700000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8545080956e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.5992107484e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.8151985728e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      6.0074056759e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7716345851e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   20
+---------------------
+Parameters for evaluation 20:
+                      1.9541803238e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3198421497e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.2227978593e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3604443406e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1574518776e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.20".
+Changing directory to "design.20"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 20:
+Active set vector = { 1 }
+                      3.3661100000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.9211742808e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6221063482e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7765040946e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9650742845e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7790126068e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   21
+---------------------
+Parameters for evaluation 21:
+                      1.9568469712e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3244212696e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1647561419e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3579044571e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1685189102e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.21".
+Changing directory to "design.21"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 21:
+Active set vector = { 1 }
+                      3.4633600000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8465827513e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6223074309e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7761441864e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9533567107e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.7347234760e-19 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7784461175e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   22
+---------------------
+Parameters for evaluation 22:
+                      1.9538633101e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3244614862e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1642162796e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3572014026e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.7347234760e-19 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1676691763e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.22".
+Changing directory to "design.22"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 22:
+Active set vector = { 1 }
+                      3.3446500000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8622500000e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6379500000e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9715000000e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.5625000000e-03 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   23
+---------------------
+Parameters for evaluation 23:
+                      1.9544900000e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3275900000e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582900000e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.5625000000e-03 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.23".
+Changing directory to "design.23"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 23:
+Active set vector = { 1 }
+                      3.4385100000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8603875138e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6281482795e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7897178423e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9681087329e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.8152814229e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   24
+---------------------
+Parameters for evaluation 24:
+                      1.9544155006e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3256296559e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1845767634e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3580865240e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.2229221343e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.24".
+Changing directory to "design.24"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 24:
+Active set vector = { 1 }
+                      3.3376800000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8760078271e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6322449351e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7829494161e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9682416548e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7847243534e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   25
+---------------------
+Parameters for evaluation 25:
+                      1.9550403131e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3264489870e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1744241241e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3580944993e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1770865300e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.25".
+Changing directory to "design.25"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 25:
+Active set vector = { 1 }
+                      3.3479000000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8617827598e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6329767196e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7909985752e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9743339184e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.3050035042e-20 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7841054081e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   26
+---------------------
+Parameters for evaluation 26:
+                      1.9544713104e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3265953439e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1864978628e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3584600351e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.3050035042e-20 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1761581121e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.26".
+Changing directory to "design.26"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 26:
+Active set vector = { 1 }
+                      3.3349200000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8548180856e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6422081802e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7803141012e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9831264811e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      8.6736173799e-20 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7875958385e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   27
+---------------------
+Parameters for evaluation 27:
+                      1.9541927234e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3284416360e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1704711518e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3589875889e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      8.6736173799e-20 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1813937578e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.27".
+Changing directory to "design.27"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 27:
+Active set vector = { 1 }
+                      3.3387400000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8602584743e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6429603107e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7910894560e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9688660720e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7860695950e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   28
+---------------------
+Parameters for evaluation 28:
+                      1.9544103390e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3285920621e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1866341839e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3581319643e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1791043925e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.28".
+Changing directory to "design.28"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 28:
+Active set vector = { 1 }
+                      3.3351100000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8617682298e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6383910940e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7852221194e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9710854121e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      9.9687670075e-20 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7823566804e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   29
+---------------------
+Parameters for evaluation 29:
+                      1.9544707292e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3276782188e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1778331791e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582651247e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      9.9687670075e-20 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1735350206e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.29".
+Changing directory to "design.29"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 29:
+Active set vector = { 1 }
+                      3.3339300000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8570818459e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6345388042e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7843987011e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9673055404e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7875854539e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   30
+---------------------
+Parameters for evaluation 30:
+                      1.9542832738e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3269077608e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1765980516e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3580383324e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1813781808e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.30".
+Changing directory to "design.30"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 30:
+Active set vector = { 1 }
+                      3.3361700000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8607582651e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6392578359e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7849577332e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9746027810e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      3.2526065175e-20 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7867357741e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   31
+---------------------
+Parameters for evaluation 31:
+                      1.9544303306e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3278515672e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1774365998e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3584761669e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      3.2526065175e-20 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1801036612e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.31".
+Changing directory to "design.31"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 31:
+Active set vector = { 1 }
+                      3.3348100000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8622500000e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6379500000e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9715000000e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.9531250000e-04 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7860866667e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   32
+---------------------
+Parameters for evaluation 32:
+                      1.9544900000e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3275900000e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582900000e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.9531250000e-04 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.32".
+Changing directory to "design.32"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 32:
+Active set vector = { 1 }
+                      3.4385300000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8659849793e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6378822229e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7854812504e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9706797161e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7866011864e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   33
+---------------------
+Parameters for evaluation 33:
+                      1.9546393992e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3275764446e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1782218756e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582407830e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1799017796e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.33".
+Changing directory to "design.33"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 33:
+Active set vector = { 1 }
+                      3.3342900000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8613582007e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6370240814e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7854338673e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9703060986e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7866439086e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   34
+---------------------
+Parameters for evaluation 34:
+                      1.9544543280e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3274048163e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1781508009e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582183659e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1799658628e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.34".
+Changing directory to "design.34"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 34:
+Active set vector = { 1 }
+                      3.3340500000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8621340806e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6387855144e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7860472037e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9710413570e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.1543264791e-21 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7862605688e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   35
+---------------------
+Parameters for evaluation 35:
+                      1.9544853632e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3277571029e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1790708055e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582624814e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      1.1543264791e-21 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1793908531e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.35".
+Changing directory to "design.35"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 35:
+Active set vector = { 1 }
+                      3.3336000000e-01 obj_fn
+
+
+
+----------------------------------
+Pre-processing Function Evaluation
+----------------------------------
+Variables before unscaling transformation:
+                      3.8621968581e-01 |BaseLine01|DesignVariables|u3_v2_x
+                      6.6376307043e-01 |BaseLine01|DesignVariables|u3_v2_y
+                      4.7879968753e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      5.9715910125e-01 |BaseLine01|DesignVariables|u4_v2_x
+                      6.7762635780e-22 |BaseLine01|DesignVariables|u4_v2_y
+                      4.7858570075e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+---------------------
+Begin Evaluation   36
+---------------------
+Parameters for evaluation 36:
+                      1.9544878743e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3275261409e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1819953129e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582954608e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      6.7762635780e-22 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1787855112e-01 |BaseLine01|DesignVariables|u4_v2_z
+
+
+Adjusting parameters_file to params.in due to work_directory usage.
+
+Adjusting results_file to results.out due to work_directory usage.
+blocking fork: fdakota_client.exe
+Prepending environment PATH with work_directory "design.36".
+Changing directory to "design.36"
+Changing directory back to C:\Users\Jakob\Documents\GitHub\bachelor\sinnvolles\Real project\Test_Simple_Monohull_real_one\01_Dakota
+Resetting environment PATH.
+
+Active response data for evaluation 36:
+Active set vector = { 1 }
+                      3.3335400000e-01 obj_fn
+
+
+COLIN Solver final status:
+---
+problem: 
+solver: 
+   name: Cobyla
+   statistics: 
+   status: 
+      status: <
+         [utilib::Any contains non-printable object, "enum 
+         colin::solver_status_enum"]
+
+      termination condition: <
+         [utilib::Any contains non-printable object, "enum 
+         colin::termination_condition_enum"]
+
+      termination message: Max-Num-Evals
+...
+
+>>>>> coliny_cobyla: post-run phase.
+********************************************************
+WARNING: The implementation of COBYLA is such that the
+best function value is not always returned to Dakota
+for reporting.  The user is advised to look through the
+Dakota output to confirm what the best function value
+and corresponding parameter values are.
+********************************************************
+
+<<<<< Function evaluation summary: 36 total (36 new, 0 duplicate)
+         obj_fn: 36 val (36 n, 0 d), 0 grad (0 n, 0 d), 0 Hess (0 n, 0 d)
+<<<<< Best parameters          =
+                      1.9544900000e+01 |BaseLine01|DesignVariables|u3_v2_x
+                      2.3275900000e+00 |BaseLine01|DesignVariables|u3_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u3_v2_z
+                      2.3582900000e+01 |BaseLine01|DesignVariables|u4_v2_x
+                      0.0000000000e+00 |BaseLine01|DesignVariables|u4_v2_y
+                      7.1791300000e-01 |BaseLine01|DesignVariables|u4_v2_z
+<<<<< Best objective function  =
+                      3.3333400000e-01
+<<<<< Best data captured at function evaluation 1
+
+
+<<<<< Iterator coliny_cobyla completed.
+<<<<< Environment execution completed.
+DAKOTA execution time in seconds:
+  Total CPU        =    113.976 [parent =    113.976, child =          0]
+  Total wall clock =    113.981
