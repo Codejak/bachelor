@@ -114,3 +114,7 @@ dmypy.json
 .pyre/
 *.sublime-project
 *.sublime-workspace
+Bachelorarbeit.pages
+sinnvolles/CAESES.stl
+sinnvolles/geometriy_initial.stl
+sinnvolles/geometry_optimized.stl
